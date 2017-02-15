@@ -1,0 +1,67 @@
+
+.mod_fluencybuilder_listbuttons input[type="submit"]{
+	width: 400px;
+	/*float: left;*/
+}
+
+.mod_fluencybuilder_buttoncontainer{
+	display: flex;
+	float: center;
+	margin-left: 30%;
+	margin-right: 30%;
+}
+
+div.mod_fluencybuilder_actionbuttons {
+	display: flex;
+	float: right;
+}
+
+
+.generaltable.mod_fluencybuilder_session_choosertable {
+	width: 100%;
+	border: 1px;
+}
+
+.mod_fluencybuilder_session_choosertable  select{
+	width: 100%; 
+}
+.mod_fluencybuilder_session_choosertable  button{
+	width: 100%; 
+}
+.generaltable.mod_fluencybuilder_session_choosertable  td{
+	text-align: center; 
+}
+.generaltable.mod_fluencybuilder_session_choosertable  td.listcontainer{
+	width: 45%;
+}
+.generaltable.mod_fluencybuilder_session_choosertable  td.buttoncontainer{
+	width: 10%;
+}
+
+div.mod_fluencybuilder_session_activitylist{
+	padding: 5px;
+}
+div.mod_fluencybuilder_session_activitylistitem{
+	padding-top: 10px;
+}
+
+div.mod_fluencybuilder_session_actionbuttons {
+	display: flex;
+	float: left;
+	padding: 10px;
+	vertical-align: bottom;
+}
+div.mod_fluencybuilder_session_choosebutton {
+	display: flex;
+	float: right;
+	padding: 10px;
+	vertical-align: bottom;
+}
+
+div.mod_fluencybuilder_session_noactivities{
+	padding: 20px;
+	margin: auto;
+	width: 70%;
+	text-align: center;
+	color: #FF0000;
+}
