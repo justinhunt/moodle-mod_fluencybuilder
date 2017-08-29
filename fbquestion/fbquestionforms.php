@@ -223,7 +223,6 @@ class fluencybuilder_add_item_form_textprompt extends fluencybuilder_add_item_fo
 		
 		$this->add_audio_prompt_upload(get_string('audioitemfile','fluencybuilder'));
 		
-        }
     }
 }
 
