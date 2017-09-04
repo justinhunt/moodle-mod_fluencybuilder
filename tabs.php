@@ -48,7 +48,6 @@ $tabs = $row = $inactive = $activated = array();
 
 $row[] = new tabobject('view', "$CFG->wwwroot/mod/fluencybuilder/view.php?id=$cm->id", get_string('view', MOD_FLUENCYBUILDER_LANG), get_string('preview', MOD_FLUENCYBUILDER_LANG, format_string($moduleinstance->name)));
 $row[] = new tabobject('fbquestions', "$CFG->wwwroot/mod/fluencybuilder/fbquestion/fbquestions.php?id=$cm->id", get_string('fbquestions', MOD_FLUENCYBUILDER_LANG), get_string('managefbquestions', MOD_FLUENCYBUILDER_LANG));
-$row[] = new tabobject('sessions', "$CFG->wwwroot/mod/fluencybuilder/session/sessions.php?id=$cm->id", get_string('sessions', MOD_FLUENCYBUILDER_LANG), get_string('managesessions', MOD_FLUENCYBUILDER_LANG));
 $row[] = new tabobject('reports', "$CFG->wwwroot/mod/fluencybuilder/reports.php?id=$cm->id", get_string('reports', MOD_FLUENCYBUILDER_LANG), get_string('viewreports', MOD_FLUENCYBUILDER_LANG));
 
 $tabs[] = $row;

@@ -161,6 +161,10 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
 		return $this->add_audio_upload(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT,-1,$label,$required);
 	}
 
+    protected final function add_audio_model_upload($label = null, $required = false) {
+        return $this->add_audio_upload(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL,-1,$label,$required);
+    }
+
 	protected final function add_picture_upload($name, $count=-1, $label = null, $required = false) {
 		if($count>-1){
 			$name = $name . $count ;
@@ -235,7 +239,9 @@ class fluencybuilder_add_item_form_audioprompt extends fluencybuilder_add_item_f
 
     public function custom_definition() {
 	
-		$this->add_audio_prompt_upload(get_string('audioitemfile','fluencybuilder'));
+		$this->add_audio_prompt_upload(get_string('addaudiopromptfile','fluencybuilder'));
+
+        $this->add_audio_model_upload(get_string('addaudiomodelfile','fluencybuilder'));
     }
 }
 

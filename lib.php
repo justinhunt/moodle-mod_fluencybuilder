@@ -62,7 +62,6 @@ define('MOD_FLUENCYBUILDER_MODESTUDENTSTUDENT', 1);
 
 
 require_once($CFG->dirroot.'/mod/fluencybuilder/fbquestion/fbquestionlib.php');
-require_once($CFG->dirroot.'/mod/fluencybuilder/session/sessionlib.php');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Moodle core API                                                            //

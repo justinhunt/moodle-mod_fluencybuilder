@@ -95,6 +95,7 @@ $redirecturl = new moodle_url('/mod/fluencybuilder/fbquestion/fbquestions.php', 
 
 
 //get filechooser and html editor options
+//get filechooser and html editor options
 $editoroptions = mod_fluencybuilder_fbquestion_fetch_editor_options($course, $context);
 $filemanageroptions = mod_fluencybuilder_fbquestion_fetch_filemanager_options($course,1);
 
@@ -102,23 +103,25 @@ $filemanageroptions = mod_fluencybuilder_fbquestion_fetch_filemanager_options($c
 //get the mform for our item
 switch($type){
 	case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:
-		$mform = new fluencybuilder_add_item_form_picturechoice(null,
+		$mform = new fluencybuilder_add_item_form_pictureprompt(null,
 			array('editoroptions'=>$editoroptions, 
 			'filemanageroptions'=>$filemanageroptions)
 		);
 		break;
 	case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
-		$mform = new fluencybuilder_add_item_form_audiochoice(null,
+		$mform = new fluencybuilder_add_item_form_audioprompt(null,
 			array('editoroptions'=>$editoroptions, 
 			'filemanageroptions'=>$filemanageroptions)
 		);
 		break;
+
 	case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
-		$mform = new fluencybuilder_add_item_form_textchoice(null,
+		$mform = new fluencybuilder_add_item_form_textprompt(null,
 			array('editoroptions'=>$editoroptions, 
 			'filemanageroptions'=>$filemanageroptions)
 		);
 		break;
+
 	case MOD_FLUENCYBUILDER_FBQUESTION_NONE:
 	default:
 		print_error('No item type specifified');
@@ -142,7 +145,6 @@ if ($data = $mform->get_data()) {
 		$theitem->tags = $data->tags;
 		$theitem->timetarget = $data->timetarget;
 		$theitem->order = $data->order;
-		$theitem->difficulty = $data->difficulty;
 		$theitem->type = $data->type;
 		$theitem->name = $data->name;
 		$theitem->modifiedby=$USER->id;
@@ -175,42 +177,22 @@ if ($data = $mform->get_data()) {
 		$theitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION} = $data->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION} ;
 		$theitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION.'format'} = $data->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION.'format'} ;
 		
-		//save item files
+		//save audio prompt files
 		if(property_exists($data,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT)){
 			file_save_draft_area_files($data->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT}, $context->id, 'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA,
 				   $theitem->id, $filemanageroptions);
 		}
-			   
-		//save item picture files
+
+        //save audio model files
+        if(property_exists($data,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL)){
+            file_save_draft_area_files($data->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL}, $context->id, 'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA,
+                $theitem->id, $filemanageroptions);
+        }
+
+        //save item picture files
 		if(property_exists($data,MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT)){
 			file_save_draft_area_files($data->{MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT}, $context->id, 'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT_FILEAREA,
 				   $theitem->id, $filemanageroptions);
-		}
-					
-		//do things dependant on type
-		switch($data->type){
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
-				
-				// Save answertext/files data
-				$data = file_postupdate_standard_editor( $data, MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER, $editoroptions, $context,
-                                        'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER_FILEAREA, $theitem->id);
-					$theitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER} = $data->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER} ;
-					$theitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . 'format'} = $data->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . 'format'};	
-				}
-				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
-				// Save answer data
-				file_save_draft_area_files($data->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER_FILEAREA}, $context->id, 'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER_FILEAREA,
-					   $theitem->id, $filemanageroptions);
-				}
-			
-				break;
-
-
-			default:
-				break;
-		
 		}
 
 		//now update the db once we have saved files and stuff
@@ -219,7 +201,6 @@ if ($data = $mform->get_data()) {
 				redirect($redirecturl);
 		}
 
-		
 		//go back to edit quiz page
 		redirect($redirecturl);
 }
@@ -248,6 +229,11 @@ if ($edit) {
 	file_prepare_draft_area($draftitemid, $context->id, 'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, $data->itemid,
 						$filemanageroptions);
 	$data->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT} = $draftitemid;
+
+$draftitemid = file_get_submitted_draft_itemid(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT);
+file_prepare_draft_area($draftitemid, $context->id, 'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, $data->itemid,
+    $filemanageroptions);
+$data->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL} = $draftitemid;
 	
 	//prepare picture file areas
 	$draftitemid = file_get_submitted_draft_itemid(MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT);
@@ -267,10 +253,10 @@ if ($edit) {
 		case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
 			//prepare answer area
 			//audio editor
-			$draftitemid = file_get_submitted_draft_itemid(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER);
-			file_prepare_draft_area($draftitemid, $context->id, 'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER_FILEAREA, $data->itemid,
+			$draftitemid = file_get_submitted_draft_itemid(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT);
+			file_prepare_draft_area($draftitemid, $context->id, 'mod_fluencybuilder', MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, $data->itemid,
 								$filemanageroptions);
-			$data->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER} = $draftitemid;
+			$data->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT} = $draftitemid;
 			
 			break;
 		case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:

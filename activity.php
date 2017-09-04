@@ -75,47 +75,21 @@ $mode= "view";
 
 
 /// Set up the page header
-$PAGE->set_url('/mod/fluencybuilder/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/fluencybuilder/activity.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 $PAGE->set_pagelayout('course');
 
 
-
-//get our javascript all ready to go
-//We can omit $jsmodule, but its nice to have it here, 
-//if for example we need to include some funky YUI stuff
-$jsmodule = array(
-	'name'     => 'mod_fluencybuilder',
-	'fullpath' => '/mod/fluencybuilder/module.js',
-	'requires' => array()
-);
-//here we set up any info we need to pass into javascript
-$opts =Array();
-
-//this inits the M.mod_fluencybuilder thingy, after the page has loaded.
-$PAGE->requires->js_init_call('M.mod_fluencybuilder.helper.init', array($opts),false,$jsmodule);
-
-//this loads any external JS libraries we need to call
-//$PAGE->requires->js("/mod/fluencybuilder/js/somejs.js");
-//$PAGE->requires->js(new moodle_url('http://www.somewhere.com/some.js'),true);
-
 //This puts all our display logic into the renderer.php file in this plugin
 $renderer = $PAGE->get_renderer('mod_fluencybuilder');
 
-//This puts all our display logic into the renderer.php file in this plugin
+//This gets all the JSON we need for our test
 $jsonrenderer = $PAGE->get_renderer('mod_fluencybuilder','json');
-
-
-
-//if we are teacher we see tabs. If student we just see the quiz
-if(has_capability('mod/fluencybuilder:preview',$modulecontext)){
-	echo $renderer->header($moduleinstance, $cm, $mode, null, get_string('view', MOD_FLUENCYBUILDER_LANG));
-}else{
-	echo $renderer->notabsheader();
-}
-echo $renderer->heading($moduleinstance->name,2);
+//we have to call this before we output header .. needed for dialogs and stuff inJS
+$PAGE->requires->jquery_plugin('ui-css');
+echo $renderer->header($moduleinstance, $cm, '', null, get_string('view', MOD_FLUENCYBUILDER_LANG));
 echo $renderer->show_intro($moduleinstance,$cm);
 
 //if we have too many attempts, lets report that.
@@ -126,7 +100,10 @@ if($moduleinstance->maxattempts > 0){
 	}
 }
 
-echo $renderer->fetch_newsessionlink($cm,$moduleinstance);
+
+echo $renderer->show_items($cm);
+
+
 
 // Finish the page
 echo $renderer->footer();

@@ -59,6 +59,6 @@ echo $renderer->header($fluencybuilder, $cm, $mode, null, get_string('fbquestion
 
 //if we have items, show em
 if($items){
-	echo $fbquestion_renderer ->show_items_list($items,$fluencybuilder,$cm);
+	echo $fbquestion_renderer->show_items_list($items,$fluencybuilder,$cm);
 }
 echo $renderer->footer();

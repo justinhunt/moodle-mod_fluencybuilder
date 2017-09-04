@@ -17,7 +17,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 require_once('fbquestion/fbquestionrenderer.php');
-require_once('session/sessionrenderer.php');
+
 
 /**
  * A custom renderer class that extends the plugin_renderer_base.
@@ -71,25 +71,40 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         return $output;
     }
 	
-	public function show_node_server_button($cm,$action,$caption){
-		//convert formdata to array
-		$formdata = array();
-		$formdata['id']=$cm->id;
-		$formdata['action']=$action;
-		$thebutton = new single_button(
-			new moodle_url(MOD_FLUENCYBUILDER_URL . '/nodeserver.php',$formdata), 
-			$caption, 'get');
 
-		return html_writer::div( $this->render($thebutton),MOD_FLUENCYBUILDER_CLASS  . '_actionbuttons');
-	}
-	
-	public function show_server_log($logdata){
-		$ta = html_writer::tag('textarea', s($logdata),
-            array('readonly' => 'readonly', 'wrap' => 'virtual', 'rows' => '20', 'cols' => '100'));
+	public function show_items($cm){
 
-		return html_writer::div( $ta,MOD_FLUENCYBUILDER_CLASS  . '_nodeserverlog');
-	}
-	
+
+        $ret='';
+        $fluencytest = new \mod_fluencybuilder\fluencytest($cm);
+        $items = $fluencytest->fetch_items();
+        $itemcount=count($items);
+        $currentitem=0;
+        foreach($items as $item) {
+            $currentitem++;
+            $showorhide= $currentitem==1 ? '' : 'hide';
+
+            //recorder
+            $resourceurl = $fluencytest->fetch_media_url(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, $item);
+            $modelurl = $fluencytest->fetch_media_url(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, $item);
+            $recorder = $fluencytest->prepare_tool($resourceurl, $modelurl, $item);
+            $itemtext =  \html_writer::tag('div',$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION}, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
+
+            //post record dialog
+            $ret.=  \html_writer::tag('div',$itemtext . $recorder, array('id' => 'mod_fluencybuilder_dplaceholder_' . $currentitem, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_itemholder ' . $showorhide));
+            $opts=array('itemid' => $item->id, 'currentitem'=>$currentitem,'itemcount'=>$itemcount,'cmid'=>$cm->id);
+            $this->page->requires->js_call_amd("mod_fluencybuilder/postrecorddialog", 'init', array($opts));
+        }
+
+        //cancel button
+        $cancelid= \html_writer::random_id(MOD_FLUENCYBUILDER_CLASS . '_cancelholder_') ;
+        $ret.=  \html_writer::tag('div','', array('id' => $cancelid, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_cancelholder'));
+        $opts=array('holderid' => $cancelid);
+        $this->page->requires->js_call_amd("mod_fluencybuilder/canceldialog", 'init', array($opts));
+
+        return $ret;
+    }
+
 	/**
      * Return HTML to display limited header
      */
@@ -98,50 +113,20 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
       }
 
 
-	public function fetch_newsessionlink($cm, $isteacher,$caption,$fluencybuilder) {
+	public function fetch_newsessionlink($cm, $fluencybuilder) {
 		global $CFG,$USER;
-		$activityid = $cm->id;
-		$sesskey = $USER->sesskey;
-		$userid = $USER->id;
-		$mode = $fluencybuilder->mode==MOD_FLUENCYBUILDER_MODETEACHERSTUDENT ? 'teacherstudent' : 'studentstudent';
-		$urlparams = array('sesskey'=>$sesskey,'activityid'=>$activityid,'userid'=>$userid,'sessionid'=>1,'mode'=>$mode);
-		switch($fluencybuilder->mode){
-			case MOD_FLUENCYBUILDER_MODESTUDENTSTUDENT:
-				//the client gets confused if no seat set, so by default 
-				//we go in as student, until its changed
-				$urlparams['seat'] = 'student';
-				break;
-			case MOD_FLUENCYBUILDER_MODETEACHERSTUDENT:
-			default:
-				if($isteacher){
-					$urlparams['seat'] = 'teacher';
-					$urlparams['raterid'] = $userid;			
-				}else{
-					$urlparams['seat'] = 'student';
-				}
-		}
-		/*
-		$config = get_config(MOD_FLUENCYBUILDER_FRANKY);
-		$link = new moodle_url($config->nodejsurl . ':' . $config->nodejswebport,$urlparams);
-		//$ret =  html_writer::link($link, get_string('gotocst',MOD_FLUENCYBUILDER_LANG));
-		$button = html_writer::tag('button',$caption, array('class'=>'btn btn-large btn-primary ' . MOD_FLUENCYBUILDER_CLASS . '_actionbutton'));
-		$popupparams = array('height'=>800,'width'=>1050);
-		$popupaction = new popup_action('click', $link,'popup',$popupparams);
-		$popupbutton =  $this->output->action_link($link, $button,$popupaction);
-		$ret= html_writer::div($popupbutton ,MOD_FLUENCYBUILDER_CLASS . '_buttoncontainer');
-		return $ret;
-		*/
-		return 'a session start link goes here';
+		//$activityid = $cm->id;
+		//$sesskey = $USER->sesskey;
+		//$userid = $USER->id;
+
+		$urlparams = array('n'=>$fluencybuilder->id,);
+
+        $link = new moodle_url($CFG->wwwroot . '/mod/fluencybuilder/activity.php',$urlparams);
+        $ret =  html_writer::link($link, get_string('gotoactivity',MOD_FLUENCYBUILDER_LANG));
+        return $ret;
+
     }
-	  
-	public function show_student_newsessionlink($cm,$caption,$fluencybuilder){
-        return $this->fetch_newsessionlink($cm,false,$caption,$fluencybuilder);
-    }
-	
-	public function show_teacher_newsessionlink($cm,$caption,$fluencybuilder){
-        return $this->fetch_newsessionlink($cm,true,$caption,$fluencybuilder);
-    }
-	
+
 
     /**
      *
@@ -252,7 +237,6 @@ class mod_fluencybuilder_report_renderer extends plugin_renderer_base {
 			 echo $datarow . $newline;
 		}
         exit();
-        break;
 	}
 
 	public function render_section_html($sectiontitle, $report, $head, $rows, $fields) {
@@ -312,64 +296,7 @@ class mod_fluencybuilder_report_renderer extends plugin_renderer_base {
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_fluencybuilder_json_renderer extends plugin_renderer_base {
- const INSTRUCTIONSID=-1;
- const CONSENTID=-2;
- const SESSIONSID=-3;
- const MYSEATID=-4;
- const PARTNERCONFIRMID=-5;
 
-	/**
-	 * Return JSON that nodejs client is expecting regarding quiz
-	 * @param lesson $lesson
-	 * @return string
-	 */
-	 public function render_results_json($results){
-		$result = new stdClass;
-		$status ='success';
-		$progress = $results;
-		$result->status=$status;
-		$result->progess=$progress;
-		return json_encode($result);
-	 }
-	 
-	 /**
-	 * Return JSON that nodejs client is expecting regarding quiz
-	 * @param lesson $lesson
-	 * @return string
-	 */
-	 public function render_testproperties_json($fluencybuilder){
-		$properties = new stdClass;
-		switch($fluencybuilder->timetarget){
-			
-			case MOD_FLUENCYBUILDER_TIMETARGET_SHOW:
-				$properties->timetarget='show';
-				break;
-			case MOD_FLUENCYBUILDER_TIMETARGET_FORCE:
-				$properties->timetarget='force';
-				break;
-			case MOD_FLUENCYBUILDER_TIMETARGET_IGNORE:
-			default:
-				$properties->timetarget='ignore';
-		}
-		return json_encode($properties);
-	 }
-
-	 /**
-	 * Return number of sessions
-	 * @param int fbquestioncount
-	 * @param stdClass fluencybuilder
-	 * @return string
-	 */
-	public function get_session_count($fbquestioncount,$fluencybuilder){
-		//count the number of fbquestions and sessions
-		if($fluencybuilder->sessionsize > 0 && $fbquestioncount >= $fluencybuilder->sessionsize){
-			$sessioncount = $fbquestioncount / $fluencybuilder->sessionsize;
-			if($sessioncount>4){$sessioncount=4;}
-		}else{
-			$sessioncount = 1;
-		}
-		return $sessioncount;
-	}
 
 	 /**
 	 * Return json for sessions (session = array of taskids)
@@ -382,78 +309,14 @@ class mod_fluencybuilder_json_renderer extends plugin_renderer_base {
 	 * @param stdClass $fluencybuilder
 	 * @return stdClass
 	 */
-	 public function render_sessions_json($title,$context,$items,$fluencybuilder) {
-		$sessions = new stdClass;
-		$tasks = array();
-		//fetch item ids
-		foreach($items as $item){
-				$tasks[] =  $this->fetch_item_id($item->type, $item);
-		}
-		
-		$fbquestioncount = count($items);
-		$sessioncount = $this->get_session_count($fbquestioncount,$fluencybuilder);
-		for($sessnumber = 1;$sessnumber <= $sessioncount;$sessnumber++){
-			if($fluencybuilder->sessionsize > 0){
-				$starttask = ($sessnumber -1) * $fluencybuilder->sessionsize;
-				$taskset = array_slice($tasks,$starttask,$fluencybuilder->sessionsize);
-			}else{
-				$taskset=$tasks;
-			}
+	 public function render_session($items) {
+		$session = new stdClass;
+		$session->items = $items;
+		$session->itemcount = count($items);
 
-			//prepend instructions and consent form 
-			if($fluencybuilder->mode==MOD_FLUENCYBUILDER_MODETEACHERSTUDENT){
-				array_unshift($taskset,self::CONSENTID);
-				array_unshift($taskset,self::INSTRUCTIONSID);
-			}else{
-				array_unshift($taskset,self::INSTRUCTIONSID);
-			}
+		return json_encode($session);
+	 }
 
-			
-			//Prepend Role Selection screen
-			//this is only in student student mode, when auto making partners
-			//otherwise there is the option on the setup screen or we show buttons to teachers
-			if($fluencybuilder->mode == MOD_FLUENCYBUILDER_MODESTUDENTSTUDENT){
-				array_unshift($taskset,self::MYSEATID);
-			}
-			
-			//partner confirmation
-			array_unshift($taskset,self::PARTNERCONFIRMID);
-			
-			$sessions->{$sessnumber}=$taskset;
-		}	
-		return json_encode($sessions);
-	 }
-	
-	/**
-	 * Return user details (name + picurl) in json
-	 * @param type (mydetails or partnerdetails
-	 * @param object $user the user db etry whose details we want
-	 * @return string
-	 */
-	 public function render_userdetails_json($type,$page, $user=false){
-		$ret = new stdClass;
-		$ret->type = $type;
-		
-		//if no user, return empty data
-		if(!$user){
-			$ret->userName = 'unknown';
-			$ret->userPic = '';
-		//if user, fetch name and pic url
-		}else{		
-			//username
-			$ret->userName = strip_tags(fullname($user));
-			
-			//userpic
-			$up =new user_picture($user);
-			$up->size=100;
-			$picurl = $up->get_url($page);
-			$ret->userPic =strip_tags($picurl->__toString());
-		}
-		
-		//return data
-		return json_encode($ret);
-	 
-	 }
 	
 	
 	/**
@@ -464,74 +327,13 @@ class mod_fluencybuilder_json_renderer extends plugin_renderer_base {
 	 public function render_tasks_json($title,$context,$items,$fluencybuilder,$cm) {
 		$config  = get_config(MOD_FLUENCYBUILDER_FRANKY);
 		
-		//count the number of fbquestions and sessions
-		$fbquestioncount = count($items);
-		if($fluencybuilder->sessionsize > 0 && $fbquestioncount >= $fluencybuilder->sessionsize){
-			$sessioncount = $fbquestioncount / $fluencybuilder->sessionsize;
-		}else{
-			$sessioncount = 1;
-		}
-		
-		//build the test object
-		$test = new stdClass;
-		$test->id = 1;
-		$test->title = $title;
-	
-		//instructions
-		$instructionitem= new stdClass();
-		$instructionitem->id = self::INSTRUCTIONSID;
-		$instructionitem->type =MOD_FLUENCYBUILDER_FBQUESTION_TYPE_INSTRUCTIONS;
-		$instructionitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION} = $config->generalinstructions_teacher;
-		$instructionitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '1'} = $config->generalinstructions_student;
-		array_unshift($items,$instructionitem);
-		
-		//consent screen
-		$consentitem= new stdClass();
-		$consentitem->id = self::CONSENTID;
-		$consentitem->type =MOD_FLUENCYBUILDER_FBQUESTION_TYPE_CONSENT;
-		$consentitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION}= '';//no consent in fluency bulder
-		array_unshift($items,$consentitem);
-		
-		//Session screen
-		$sessionsitem = new stdClass();
-		$sessionsitem->id = self::SESSIONSID;
-		$sessionsitem->type =MOD_FLUENCYBUILDER_FBQUESTION_TYPE_CHOICE;
-		//prompt
-		$sessionsitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION} = 'Choose the Session:';
-		//variable
-		$sessionsitem->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOFNAME}='action:doSetSession';
-		//variable values
-		$sessionsitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '1'} = '1';
-		if($sessioncount > 1){
-			$sessionsitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '2'} = '2';
-		}
-		if($sessioncount > 2){
-			$sessionsitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '3'} = '3';
-		}
-		if($sessioncount > 3){
-			$sessionsitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '4'} = '4';
-		}
-		array_unshift($items,$sessionsitem);
-		
-		//teacher/student choice
-		$myseatitem = new stdClass();
-		$myseatitem->id = self::MYSEATID;
-		$myseatitem->type =MOD_FLUENCYBUILDER_FBQUESTION_TYPE_CHOICE;
-		//prompt
-		$myseatitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION} = 'Choose your Role:';
-		//variable
-		$myseatitem->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOFNAME}='action:doSetSeat';
-		//variable values
-		$myseatitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '1'} = 'teacher';
-		$myseatitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '2'} = 'student';
-		array_unshift($items,$myseatitem);
-		
+		/*
 		$partnerconfirmitem= new stdClass();
 		$partnerconfirmitem->id = self::PARTNERCONFIRMID;
 		$partnerconfirmitem->type =MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PARTNERCONFIRM;
 		$partnerconfirmitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION}= '';
 		array_unshift($items,$partnerconfirmitem);
-		
+		*/
 		
 		
 		//process our tasks
@@ -548,25 +350,20 @@ class mod_fluencybuilder_json_renderer extends plugin_renderer_base {
 		return json_encode($ret);
 	 }
 	 
-	 public function fetch_item_id($type, $item){
-		$return ='unknown';
+	 public function fetch_item_id($item){
 		switch($item->type){
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTURECHOICE:
+			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:
 				//$return = 'picture_' . $item->id;
 				$return  = $item->id;
 				break;
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTCHOICE:
+			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
 				//$return = 'listen_' . $item->id;
 				$return  = $item->id;
 				break;
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TABOO:
-				//$return = 'taboo_' . $item->id;
-				$return  = $item->id;
-				break;
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TRANSLATE:
-				//$return = 'taboo_' . $item->id;
-				$return  = $item->id;
-				break;
+            case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
+                //$return = 'listen_' . $item->id;
+                $return  = $item->id;
+                break;
 			default:
 				$return  = $item->id;
 		}
@@ -578,7 +375,7 @@ class mod_fluencybuilder_json_renderer extends plugin_renderer_base {
 	 * @param lesson $lesson
 	 * @return string
 	 */
-	 public function render_fbquestion($context,$item,$cm) {
+	 public function render_fbitem($context,$item,$cm) {
 	 global $DB;
 	 
 		$theitem = new stdClass;
@@ -610,142 +407,25 @@ class mod_fluencybuilder_json_renderer extends plugin_renderer_base {
 	}
 
 		switch($item->type){
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTURECHOICE:
-				$theitem->type='Productive';
-				$theitem->subType='picture';
-				$theitem->content=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_PICTUREQUESTION_FILEAREA,$item);
-				$answers = array();
-				for($x=1;$x<MOD_FLUENCYBUILDER_FBQUESTION_MAXANSWERS+1;$x++){
-					$theanswer= new stdClass;
-					$theanswer->id = $x;
-					$theanswer->img = $this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_PICTUREANSWER_FILEAREA . $x,$item);
-					$theanswer->correct = ($x==$item->{MOD_FLUENCYBUILDER_FBQUESTION_CORRECTANSWER});
-					$answers[] = $theanswer;
-				}
-				$theitem->answers = $answers;
+			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:
+				$theitem->pictureprompt=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT_FILEAREA,$item);
+                $theitem->audiomodel=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA,$item);
 				break;
 				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_CHOICE:
-				$theitem->type='Productive';
-				$theitem->subType='choice';
-				$theitem->heading=$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION};
-				$theitem->variable=$item->{MOD_FLUENCYBUILDER_FBQUESTION_AUDIOFNAME};
-				$answers = array();
-				for($x=1;$x<MOD_FLUENCYBUILDER_FBQUESTION_MAXANSWERS+1;$x++){
-					if(!property_exists($item,MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . $x)){
-						break;
-					}
-					$theanswer= new stdClass;
-					$theanswer->id = $x;
-					$theanswer->text = $item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . $x};
-					$theanswer->correct = true;
-					$answers[] = $theanswer;
-				}
-				$theitem->answers = $answers;
+			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
+                $theitem->audioprompt=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA,$item);
+                $theitem->audiomodel=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA,$item);
 				break;
 			
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTCHOICE:
-				$theitem->type='Productive';
-				$theitem->subType='listen';
-				$theitem->content=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOQUESTION_FILEAREA,$item);
-				$answers = array();
-				for($x=1;$x<MOD_FLUENCYBUILDER_FBQUESTION_MAXANSWERS+1;$x++){
-					$theanswer= new stdClass;
-					$theanswer->id = $x;
-					$theanswer->text = $item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . $x};
-					$theanswer->correct = ($x==$item->{MOD_FLUENCYBUILDER_FBQUESTION_CORRECTANSWER});
-					$answers[] = $theanswer;
-				}
-				$theitem->answers = $answers;
+			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
+				$theitem->audioprompt=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA,$item);
+                $theitem->audiomodel=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA,$item);
 				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TABOO:
-				$theitem->type='Productive';
-				$theitem->subType='taboo';
-				$theitem->content=$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION};
-				$answers = array();
-				
-				$noanswer= new stdClass;
-				$noanswer->id = 0;
-				$noanswer->text = 'No. I could not answer';
-				$noanswer->correct = false;
-				$answers[] = $noanswer;
-				
-				$yesanswer= new stdClass;
-				$yesanswer->id = 1;
-				$yesanswer->text = 'YES. I could answer';
-				$yesanswer->correct = true;
-				
-				$answers[] = $yesanswer;
-				$theitem->answers = $answers;
-				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TRANSLATE:
-				$theitem->type='Receptive';
-				$theitem->subType='translate';
-				$theitem->content=array('source'=>$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION},'target'=>$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '1'});
-				$answers = array();
-				$theanswer= new stdClass;
-				$theanswer->id = 1;
-				$theanswer->text = $item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '1'};
-				$theanswer->correct = 1;
-				$answers[] = $theanswer;
-				$theitem->answers = $answers;
-				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOCHOICE:
-				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_CONSENT:
-				$theitem->type='Productive';
-				$theitem->subType='consent';
-				$theitem->content=$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION};
-				$theitem->answers='waiting for consent';
-				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PARTNERCONFIRM:
-				$theitem->type='Productive';
-				$theitem->subType='partnerconfirm';
-				$theitem->content='';
-				$theitem->answers='';
-				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_INSTRUCTIONS:
-				$theitem->type='Productive';
-				$theitem->subType='instructions';
-				$theitem->content=$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION};
-				$theitem->answers=$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER . '1'};
-				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_WHOWHO:
-				$theitem->type='Productive';
-				$theitem->subType='whowho';
-				$theitem->content='';
-				$theitem->answers='';
-				break;
+
 				
 		}
 		return $theitem;
 	 }
-	 
-	 function fetch_media_url($context,$filearea,$item){
-			//get question audio div (not so easy)			
-			$fs = get_file_storage();
-			$files = $fs->get_area_files($context->id, 'mod_fluencybuilder',$filearea,$item->id);
-			foreach ($files as $file) {
-				$filename = $file->get_filename();
-				if($filename=='.'){continue;}
-				$filepath = '/';
-				$mediaurl = moodle_url::make_pluginfile_url($context->id,'mod_fluencybuilder',
-						$filearea, $item->id,
-						$filepath, $filename);
-				return $mediaurl->__toString();
-				
-			}
-			//We always take the first file and if we have none, thats not good.
-			return "$context->id pp $filearea pp $item->id";
-	 }
-
 
 }
 

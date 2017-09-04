@@ -44,16 +44,16 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
 
 		$addtextchoiceitemurl = new moodle_url('/mod/fluencybuilder/fbquestion/managefbquestions.php',
 			array('id'=>$this->page->cm->id, 'itemid'=>$itemid, 'type'=>MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT));
-        $links[] = html_writer::link($addtextchoiceitemurl, get_string('addtextchoiceitem', 'fluencybuilder'));
+        $links[] = html_writer::link($addtextchoiceitemurl, get_string('addtextpromptitem', 'fluencybuilder'));
 		
         $addpicturechoiceitemurl = new moodle_url('/mod/fluencybuilder/fbquestion/managefbquestions.php',
 			array('id'=>$this->page->cm->id, 'itemid'=>$itemid, 'type'=>MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT));
-        $links[] = html_writer::link($addpicturechoiceitemurl, get_string('addpicturechoiceitem', 'fluencybuilder'));
+        $links[] = html_writer::link($addpicturechoiceitemurl, get_string('addpicturepromptitem', 'fluencybuilder'));
         
 		//for now we can this. Later lets fix it up.
-        $addaudiochoiceitemurl = new moodle_url('/mod/fluencybuilder/fbquestion/managefbquestions.php',
+        $addaudiopromptitemurl = new moodle_url('/mod/fluencybuilder/fbquestion/managefbquestions.php',
 			array('id'=>$this->page->cm->id, 'itemid'=>$itemid, 'type'=>MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT));
-        //$links[] = html_writer::link($addaudiochoiceitemurl, get_string('addaudiochoiceitem', 'fluencybuilder'));
+            $links[] = html_writer::link($addaudiopromptitemurl, get_string('addaudiopromptitem', 'fluencybuilder'));
 		
 
 		
@@ -88,7 +88,7 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
 		//core_collator::asort_objects_by_property($items,'timecreated',core_collator::SORT_NUMERIC);
 		//core_collator::asort_objects_by_property($items,'name',core_collator::SORT_STRING);
 
-		//loop through the homoworks and add to table
+		//loop through the items and add to table
 		foreach ($items as $item) {
 			$row = new html_table_row();
 		

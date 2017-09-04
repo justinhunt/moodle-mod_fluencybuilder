@@ -1,3 +1,26 @@
+.mod_fluencybuilder_dialogcontentbox{
+	border-width: 2px;
+	border-style: solid;
+	border-color: green;
+	margin: 5px;
+}
+
+.mod_fluencybuilder_autobutton_active{
+	border-width: 2px;
+	border-style: dashed;
+	border-color: red;
+}
+
+.mod_fluencybuilder_autobutton_inactive{
+	border-width: 2px;
+	border-style: solid;
+	border-color: black;
+}
+
+.mod_fluencybuilder_listbuttons input[type="submit"]{
+	width: 400px;
+	/*float: left;*/
+}
 
 .mod_fluencybuilder_listbuttons input[type="submit"]{
 	width: 400px;
