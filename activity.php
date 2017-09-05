@@ -90,7 +90,7 @@ $jsonrenderer = $PAGE->get_renderer('mod_fluencybuilder','json');
 //we have to call this before we output header .. needed for dialogs and stuff inJS
 $PAGE->requires->jquery_plugin('ui-css');
 echo $renderer->header($moduleinstance, $cm, '', null, get_string('view', MOD_FLUENCYBUILDER_LANG));
-echo $renderer->show_intro($moduleinstance,$cm);
+
 
 //if we have too many attempts, lets report that.
 if($moduleinstance->maxattempts > 0){
@@ -101,7 +101,7 @@ if($moduleinstance->maxattempts > 0){
 }
 
 
-echo $renderer->show_items($cm);
+echo $renderer->show_items($cm,$moduleinstance);
 
 
 

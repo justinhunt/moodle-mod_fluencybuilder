@@ -62,6 +62,12 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
      */
     protected $editoroptions = array();
 
+    /**
+     * An array of options used in the htmleditor
+     * @var array
+     */
+    protected $timetarget = 10;
+
 	/**
      * An array of options used in the filemanager
      * @var array
@@ -100,6 +106,7 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
         $mform = $this->_form;
         $this->editoroptions = $this->_customdata['editoroptions'];
 		$this->filemanageroptions = $this->_customdata['filemanageroptions'];
+        $this->timetarget = $this->_customdata['timetarget'];
 
 	
         $mform->addElement('header', 'typeheading', get_string('createaitem', 'fluencybuilder', get_string($this->typestring, 'fluencybuilder')));
@@ -114,8 +121,8 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
             $mform->addElement('hidden', 'type');
             $mform->setType('type', PARAM_INT);
 			
-			$mform->addElement('hidden', 'order');
-            $mform->setType('order', PARAM_INT);
+			$mform->addElement('hidden', 'itemorder');
+            $mform->setType('itemorder', PARAM_INT);
 
             $mform->addElement('text', 'name', get_string('itemtitle', 'fluencybuilder'), array('size'=>70));
             $mform->setType('name', PARAM_TEXT);
@@ -127,13 +134,12 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
         }
 		//visibility
 		$mform->addElement('selectyesno', 'visible', get_string('visible'));
-		//tags
-		$mform->addElement('textarea', 'tags', get_string('tags','fluencybuilder'), 'wrap="virtual" rows="2" cols="80"', array());
-		$mform->setType('tags', PARAM_TEXT);
+
 		//time target
 		$duration_options = array('defaultunit'=>1,'optional'=>0);
 		$mform->addElement('duration', 'timetarget', get_string('timetarget','fluencybuilder'),$duration_options);
-		
+		$mform->setDefault('timetarget',$this->timetarget);
+
         $this->custom_definition();
 		
 		

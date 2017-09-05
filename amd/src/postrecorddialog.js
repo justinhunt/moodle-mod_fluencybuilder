@@ -40,12 +40,12 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             var ip =this.instanceprops;
             var element = $('#' + ip.holderid);
             if (element.length ==0){return;}
-
+            var title = M.util.get_string('recui_howwasit', 'mod_fluencybuilder');
             var thecontrols = '<div class="hide">';
-            thecontrols += '<div class="mod_fluencybuilder_dialogcontentbox">';
+            thecontrols += '<div class="mod_fluencybuilder_dialogcontentbox" title="' + title + '">';
             thecontrols +=  '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_play">' + 'me play' + '</button>';
-            thecontrols += '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ok" disabled>' + 'me ok' + '</button>';
-            thecontrols += ' <button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ng" disabled>' + 'me ng' + '</button>';
+            thecontrols += '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ok">' + 'me ok' + '</button>';
+            thecontrols += ' <button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ng">' + 'me ng' + '</button>';
             thecontrols += '</div>';//end of dialog div
             thecontrols += '</div>';//end of hide div
 
@@ -72,29 +72,31 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             //when the mode player finishes show our dialog
             var model_player = $('#' + ip.holderid + '  .poodll_modelplayer_fluencybuilder');
             model_player.on('ended',function(){
+                //prepare next button
+                var nexttext = M.util.get_string('recui_next', 'mod_fluencybuilder');
+                var buttons ={};
+                buttons[nexttext] =  function() {
+                        $( this ).dialog( "close" );
+                        for(var i=1; i < ip.itemcount+1;i++){
+                            if(ip.currentitem == ip.itemcount){
+                                window.location.replace(M.cfg.wwwroot + '/mod/fluencybuilder/view.php?id=' + ip.cmid);
+                            }
+                            if(ip.currentitem+1==i){
+                                $('#' + 'mod_fluencybuilder_dplaceholder_' + i).show();
+                            }else{
+                                $('#' + 'mod_fluencybuilder_dplaceholder_' + i).hide();
+                            }
+                        }
+                    }
+
+                    //prepare and show dialog
                     ip.controls.the_dialog.dialog({
+                        dialogClass: 'mod_fluencybuilder_no-close',
                         resizable: false,
                         height: "auto",
                         width: 400,
                         modal: true,
-                        buttons: {
-                            "Next": function() {
-                                $( this ).dialog( "close" );
-                                for(var i=1; i < ip.itemcount+1;i++){
-                                    if(ip.currentitem == ip.itemcount){
-                                        window.location.replace(M.cfg.wwwroot + '/mod/fluencybuilder/view.php?id=' + ip.cmid);
-                                    }
-                                    if(ip.currentitem+1==i){
-                                        $('#' + 'mod_fluencybuilder_dplaceholder_' + i).show();
-                                    }else{
-                                        $('#' + 'mod_fluencybuilder_dplaceholder_' + i).hide();
-                                    }
-                                }
-                            },
-                            Cancel: function() {
-                                $( this ).dialog( "close" );
-                            }
-                        }
+                        buttons: buttons
                     });
             });
         },

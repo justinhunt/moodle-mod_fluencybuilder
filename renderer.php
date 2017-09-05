@@ -72,7 +72,7 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
     }
 	
 
-	public function show_items($cm){
+	public function show_items($cm,$fluencybuilder){
 
 
         $ret='';
@@ -88,10 +88,11 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
             $resourceurl = $fluencytest->fetch_media_url(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, $item);
             $modelurl = $fluencytest->fetch_media_url(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, $item);
             $recorder = $fluencytest->prepare_tool($resourceurl, $modelurl, $item);
-            $itemtext =  \html_writer::tag('div',$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION}, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
+            $itemprogress =  \html_writer::tag('h3',$currentitem . '/' . $itemcount, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemprogress'));
+            $itemtext =  \html_writer::tag('div',$fluencybuilder->questionheader, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
 
             //post record dialog
-            $ret.=  \html_writer::tag('div',$itemtext . $recorder, array('id' => 'mod_fluencybuilder_dplaceholder_' . $currentitem, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_itemholder ' . $showorhide));
+            $ret.=  \html_writer::tag('div',$itemprogress . $itemtext . $recorder, array('id' => 'mod_fluencybuilder_dplaceholder_' . $currentitem, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_itemholder ' . $showorhide));
             $opts=array('itemid' => $item->id, 'currentitem'=>$currentitem,'itemcount'=>$itemcount,'cmid'=>$cm->id);
             $this->page->requires->js_call_amd("mod_fluencybuilder/postrecorddialog", 'init', array($opts));
         }
@@ -99,8 +100,19 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         //cancel button
         $cancelid= \html_writer::random_id(MOD_FLUENCYBUILDER_CLASS . '_cancelholder_') ;
         $ret.=  \html_writer::tag('div','', array('id' => $cancelid, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_cancelholder'));
-        $opts=array('holderid' => $cancelid);
+        $opts=array('holderid' => $cancelid,'cmid'=>$cm->id);
         $this->page->requires->js_call_amd("mod_fluencybuilder/canceldialog", 'init', array($opts));
+
+        //strings for JS
+        $this->page->requires->strings_for_js(array(
+            'cancelui_cancelactivity',
+            'cancelui_reallycancel',
+            'cancelui_iwantquit',
+            'cancelui_inoquit',
+            'recui_howwasit',
+            'recui_next'
+        ),
+            'mod_fluencybuilder');
 
         return $ret;
     }

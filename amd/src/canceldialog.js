@@ -24,13 +24,14 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             var ip =this.instanceprops;
             var element = $('#' + ip.holderid);
             if (element.length ==0){return;}
+            var title = M.util.get_string('cancelui_cancelactivity', 'mod_fluencybuilder');
 
             var thecontrols = '<div class="hide">';
-            thecontrols += '<div class="mod_fluencybuilder_cancelbox">';
-            thecontrols +=  'banana wa wa';//M.util.get_string('recui_play', 'mod_fluencybuilder') ;
+            thecontrols += '<div class="mod_fluencybuilder_cancelbox" title="' + title + '">';
+            thecontrols +=  M.util.get_string('cancelui_reallycancel', 'mod_fluencybuilder') ;
             thecontrols += '</div>';//end of dialog div
             thecontrols += '</div>';//end of hide div
-            thecontrols +=  '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_cancelbutton">' + 'cancel' + '</button>';
+            thecontrols +=  '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_cancelbutton">' + M.util.get_string('cancelui_cancelactivity', 'mod_fluencybuilder')  + '</button>';
             $(element).prepend(thecontrols);
 
             var controls ={
@@ -45,20 +46,20 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
 
 
             ip.controls.cancelbutton.click(function(){
+                var quittext = M.util.get_string('cancelui_iwantquit', 'mod_fluencybuilder');
+                var noquittext = M.util.get_string('cancelui_inoquit', 'mod_fluencybuilder');
+                var buttons ={};
+                buttons[quittext] =  function() {
+                    window.location.replace(M.cfg.wwwroot + '/mod/fluencybuilder/view.php?id=' + ip.cmid);
+                };
+                buttons[noquittext] =  function() { $( this ).dialog( "close" );};
 
                 ip.controls.the_dialog.dialog({
                     resizable: false,
                     height: "auto",
                     width: 400,
                     modal: true,
-                    buttons: {
-                        "Really Cancel?": function() {
-                            $( this ).dialog( "close" );
-                        },
-                        Cancel: function() {
-                            $( this ).dialog( "close" );
-                        }
-                    }
+                    buttons: buttons
                 });
 
             });

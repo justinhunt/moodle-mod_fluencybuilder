@@ -51,31 +51,27 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
 
         // root element describing fluencybuilder instance
         $oneactivity = new backup_nested_element(MOD_FLUENCYBUILDER_MODNAME, array('id'), array(
-            'course','name','intro','introformat','someinstancesetting','grade','gradeoptions','maxattempts','mingrade',
-			'mode','partnermode','sessionsize','timecreated','timemodified'
+            'course','name','intro','introformat','questionheader','timetarget','grade','gradeoptions','maxattempts','mingrade',
+			'timecreated','timemodified'
 			));
 			
 		// fbquestion	
 		$fbquestions = new backup_nested_element('fbquestions');
 		$fbquestion = new backup_nested_element('fbquestion', array('id'),array(
-			MOD_FLUENCYBUILDER_MODNAME, 'name', 'type','visible','itemtext', 'itemformat','itemaudiofname', 'answertext1', 'answertext1format','answertext2', 'answertext2format','answertext3', 'answertext3format','answertext4', 'answertext4format',
-		  'correctanswer','shuffleanswers','answercount','answersinrow','answerwidth','createdby','modifiedby','timecreated','timemodified','difficulty','timebound1','timegrade1','timebound2','timegrade2','timebound3','timegrade3','timebound4','timegrade4','timebound5','timegrade5','fbquestionkey'));
+			MOD_FLUENCYBUILDER_MODNAME, 'name','itemorder','timetarget', 'type','visible','itemtext', 'itemformat','itemaudiofname', 'customtext1', 'customtext1format','customtext2', 'customtext2format','customtext3', 'customtext3format','customtext4', 'customtext4format',
+		  'timecreated','timemodified','fbquestionkey','createdby','modifiedby'));
 		
-		
-		// sessions	
-		$sessions = new backup_nested_element('sessions');
-		$session = new backup_nested_element('session', array('id'),array('course', MOD_FLUENCYBUILDER_MODNAME , 'name', 'type','active','displayorder', 'fbquestionkeys','timecreated', 'timemodified')); 
-		
+
 		//attempts
         $attempts = new backup_nested_element('attempts');
         $attempt = new backup_nested_element('attempt', array('id'),array(
-			MOD_FLUENCYBUILDER_MODNAME ."id","course","userid","status","mode","sessionscore","timecreated","timemodified"
+			MOD_FLUENCYBUILDER_MODNAME ."id","course","userid","mode","sessionscore","timecreated","timemodified"
 		));
 		
 		//items
         $items = new backup_nested_element('items');
         $item = new backup_nested_element('item', array('id'),array(
-			MOD_FLUENCYBUILDER_MODNAME ."id","course","userid","attemptid","partnerid","fbquestionid","sessionid","correct","duration","timecreated","timemodified"
+			MOD_FLUENCYBUILDER_MODNAME ."id","course","userid","attemptid","fbquestionid","itemid","points","correct","duration","timecreated","timemodified"
 		));
 
 		
@@ -118,11 +114,11 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
 		
 		//other file areas use fluencybuilderid
 		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION_FILEAREA, 'id');
-		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_PICTUREQUESTION_FILEAREA, 'id');
-		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOQUESTION_FILEAREA, 'id');
+		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT_FILEAREA, 'id');
+		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, 'id');
+        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, 'id');
 		for($i=1;$i<=MOD_FLUENCYBUILDER_FBQUESTION_MAXANSWERS;$i++){
 			$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER_FILEAREA.$i, 'id');
-			$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_PICTUREANSWER_FILEAREA.$i, 'id');
 			$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER_FILEAREA.$i, 'id');
 		}
 

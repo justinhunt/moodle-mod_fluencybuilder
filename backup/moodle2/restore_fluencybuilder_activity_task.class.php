@@ -57,7 +57,7 @@ class restore_fluencybuilder_activity_task extends restore_activity_task {
                           array('intro'), MOD_FLUENCYBUILDER_MODNAME);
 
         $contents[] = new restore_decode_content(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,
-                          array('itemtext','answertext1','answertext2','answertext3','answertext4'), MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
+                          array('itemtext','customtext1','customtext2','customtext3','customtext4'), MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
 
         return $contents;
     }

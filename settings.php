@@ -29,20 +29,14 @@ require_once($CFG->dirroot.'/mod/fluencybuilder/lib.php');
 
 if ($ADMIN->fulltree) {
 
-
-	 $settings->add(new admin_setting_configtext('mod_fluencybuilder/listheight',
-        get_string('listheight', 'fluencybuilder'), get_string('listheightdetails', 'fluencybuilder'), 12, PARAM_INT));
-		
-	//General Instructions at beginning of activity
-	$defaultInstructions =	"Teacher instructions";
 	
-	 $settings->add(new admin_setting_configtextarea('mod_fluencybuilder/generalinstructions_teacher',
-				get_string('generalinstructions_teacher', MOD_FLUENCYBUILDER_LANG),
-				get_string('generalinstructions_teacher_desc', MOD_FLUENCYBUILDER_LANG),$defaultInstructions));
-	
-	$defaultInstructions =	"Student instructions";
-	$settings->add(new admin_setting_configtextarea('mod_fluencybuilder/generalinstructions_student',
-				get_string('generalinstructions_student', MOD_FLUENCYBUILDER_LANG),
-				get_string('generalinstructions_student_desc', MOD_FLUENCYBUILDER_LANG),''));
+	$defaultInstructions =	"Listen to the audio and respond appropriately";
+	$settings->add(new admin_setting_configtextarea('mod_fluencybuilder/questionheader',
+				get_string('questionheader', MOD_FLUENCYBUILDER_LANG),
+				get_string('questionheader_desc', MOD_FLUENCYBUILDER_LANG),$defaultInstructions));
 
+    $settings->add( new admin_setting_configduration('mod_fluencybuilder/timetarget',
+        get_string('timetarget', MOD_FLUENCYBUILDER_LANG),
+        get_string('timetarget_def', MOD_FLUENCYBUILDER_LANG),
+        10));
 }

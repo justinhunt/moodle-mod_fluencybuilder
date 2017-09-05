@@ -105,20 +105,23 @@ switch($type){
 	case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:
 		$mform = new fluencybuilder_add_item_form_pictureprompt(null,
 			array('editoroptions'=>$editoroptions, 
-			'filemanageroptions'=>$filemanageroptions)
+			'filemanageroptions'=>$filemanageroptions,
+                'timetarget'=>$fluencybuilder->timetarget)
 		);
 		break;
 	case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
 		$mform = new fluencybuilder_add_item_form_audioprompt(null,
 			array('editoroptions'=>$editoroptions, 
-			'filemanageroptions'=>$filemanageroptions)
+			'filemanageroptions'=>$filemanageroptions,
+                'timetarget'=>$fluencybuilder->timetarget)
 		);
 		break;
 
 	case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
 		$mform = new fluencybuilder_add_item_form_textprompt(null,
 			array('editoroptions'=>$editoroptions, 
-			'filemanageroptions'=>$filemanageroptions)
+			'filemanageroptions'=>$filemanageroptions,
+                'timetarget'=>$fluencybuilder->timetarget)
 		);
 		break;
 
@@ -142,9 +145,8 @@ if ($data = $mform->get_data()) {
         $theitem->fluencybuilder = $fluencybuilder->id;
         $theitem->id = $data->itemid;
 		$theitem->visible = $data->visible;
-		$theitem->tags = $data->tags;
 		$theitem->timetarget = $data->timetarget;
-		$theitem->order = $data->order;
+		$theitem->itemorder = $data->itemorder;
 		$theitem->type = $data->type;
 		$theitem->name = $data->name;
 		$theitem->modifiedby=$USER->id;

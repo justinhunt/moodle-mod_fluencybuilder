@@ -41,7 +41,7 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
 
         $output = $this->output->heading(get_string("whatdonow", "fluencybuilder"), 3);
         $links = array();
-
+/*
 		$addtextchoiceitemurl = new moodle_url('/mod/fluencybuilder/fbquestion/managefbquestions.php',
 			array('id'=>$this->page->cm->id, 'itemid'=>$itemid, 'type'=>MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT));
         $links[] = html_writer::link($addtextchoiceitemurl, get_string('addtextpromptitem', 'fluencybuilder'));
@@ -49,7 +49,7 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
         $addpicturechoiceitemurl = new moodle_url('/mod/fluencybuilder/fbquestion/managefbquestions.php',
 			array('id'=>$this->page->cm->id, 'itemid'=>$itemid, 'type'=>MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT));
         $links[] = html_writer::link($addpicturechoiceitemurl, get_string('addpicturepromptitem', 'fluencybuilder'));
-        
+  */
 		//for now we can this. Later lets fix it up.
         $addaudiopromptitemurl = new moodle_url('/mod/fluencybuilder/fbquestion/managefbquestions.php',
 			array('id'=>$this->page->cm->id, 'itemid'=>$itemid, 'type'=>MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT));

@@ -38,15 +38,8 @@ $string['fluencybuildername_help'] = 'This is the content of the help tooltip as
 $string['fluencybuilder'] = 'Fluency Builder';
 $string['pluginadministration'] = 'Fluency Builder Administration';
 $string['pluginname'] = 'Fluency Builder Activity';
-$string['someadminsetting'] = 'Some Admin Setting';
-$string['someadminsetting_details'] = 'More info about Some Admin Setting';
-$string['someinstancesetting'] = 'Some Instance Setting';
-$string['someinstancesetting_details'] = 'More infor about Some Instance Setting';
-
-$string['generalinstructions_teacher'] = 'General Instr. teacher';
-$string['generalinstructions_student'] = 'General Instr. student';
-$string['generalinstructions_teacher_desc'] = '...';
-$string['generalinstructions_student_desc'] = '...';
+$string['questionheader'] = 'Question header';
+$string['questionheader_desc'] = 'Add a default question header here';
 
 
 $string['fluencybuildersettings'] = 'fluencybuilder settings';
@@ -80,8 +73,6 @@ $string['defaultsettings'] ='Default Settings';
 $string['exceededattempts'] ='You have completed the maximum {$a} attempts.';
 $string['fbquestions'] ='FBQuestions';
 $string['managefbquestions'] ='Manage FBQuestions';
-$string['sessions'] ='Sessions';
-$string['managesessions'] ='Manage Sessions';
 //fbquestions
 
 $string['whatdonow'] = 'What would you like to do?';
@@ -89,8 +80,8 @@ $string['addnewitem'] = 'Add a New item';
 $string['addingitem'] = 'Adding a New item';
 $string['editingitem'] = 'Editing a item';
 $string['createaitem'] = 'Create a item';
-$string['itemtitle'] = 'item Title';
-$string['itemcontents'] = 'item Text';
+$string['itemtitle'] = 'Item Title';
+$string['itemcontents'] = 'Item Description';
 $string['answer'] = 'Answer';
 $string['saveitem'] = 'Save item';
 $string['audioitemfile'] = 'item Audio(MP3)';
@@ -144,7 +135,8 @@ $string['partnermode'] = 'Partner Mode';
 $string['sessionsize'] = 'Questions per Session';
 $string['selectsession'] = 'Teacher selects session';
 $string['tags'] = 'Tags';
-$string['timetarget'] = 'Time Target';
+$string['timetarget'] = 'Item Time Target';
+$string['timetarget_def'] = 'The default time target for each item. Can be overridden at activity and item levels.';
 $string['timetargetignore'] = 'Ignore time target';
 $string['timetargetforce'] = 'Enforce time target';
 $string['timetargetshow'] = 'Show time target';
@@ -196,15 +188,14 @@ $string['confirmattemptdelete'] ='Are you sure you want to delete this attempt?'
 $string['confirmattemptdeletealltitle'] ='Delete ALL attempts?';
 $string['confirmattemptdeleteall'] ='Are you sure you want to delete ALL attempts?';
 
-//sessions
-$string['sessiontitle'] = 'Session Title';
-$string['sessionname'] = 'Name';
-$string['sessiontype'] = 'Type';
-$string['editsession'] = 'edit session';
-$string['deletesession'] = 'delete session';
-$string['active'] = 'Active';
-$string['normal'] = 'Normal';
 $string['fbquestioncount'] = 'Items';
-
 $string['points'] = 'Points';
 
+//Cancel dialog
+$string['cancelui_cancelactivity'] = 'Cancel activity';
+$string['cancelui_reallycancel'] = 'Do you really want to quit?';
+$string['cancelui_iwantquit'] = 'I want to quit';
+$string['cancelui_inoquit'] = 'Go back';
+//How was it dialog
+$string['recui_next'] = 'Next';
+$string['recui_howwasit'] = 'How was it?';
