@@ -78,8 +78,6 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
 		// Build the tree.
 		$oneactivity->add_child($fbquestions);
 		$fbquestions->add_child($fbquestion);
-		$oneactivity->add_child($sessions);
-		$sessions->add_child($session);
         $oneactivity->add_child($attempts);
         $attempts->add_child($attempt);
 		$oneactivity->add_child($items);
@@ -92,8 +90,6 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
 		$fbquestion->set_source_table(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,
                                         array(MOD_FLUENCYBUILDER_MODNAME => backup::VAR_PARENTID));
 
-		$session->set_source_table(MOD_FLUENCYBUILDER_SESSION_TABLE,
-                                        array(MOD_FLUENCYBUILDER_MODNAME => backup::VAR_PARENTID));
 
         //sources if including user info
         if ($userinfo) {

@@ -107,21 +107,7 @@ class restore_fluencybuilder_activity_structure_step extends restore_activity_st
         $newfbquestionid = $DB->insert_record(MOD_FLUENCYBUILDER_FBQUESTION_TABLE, $data);
        $this->set_mapping(MOD_FLUENCYBUILDER_FBQUESTION_TABLE, $oldid, $newfbquestionid, true); // Mapping with files
   }
-  
-  protected function process_fluencybuilder_sessions($data) {
-        global $DB;
 
-        $data = (object)$data;
-        $oldid = $data->id;
-
-        $data->timecreated = $this->apply_date_offset($data->timecreated);
-
-		
-        $data->{MOD_FLUENCYBUILDER_MODNAME} = $this->get_new_parentid(MOD_FLUENCYBUILDER_MODNAME);
-        $newsessionid = $DB->insert_record(MOD_FLUENCYBUILDER_SESSION_TABLE, $data);
-       $this->set_mapping(MOD_FLUENCYBUILDER_SESSION_TABLE, $oldid, $newsessionid, true); // Mapping with files ..dont need this
-  }
-	
 	//note these function names are set above in the restore path element
 	//we used the table name there, thats all
 	protected function process_fluencybuilder_attempt($data) {
