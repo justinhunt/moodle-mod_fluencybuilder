@@ -60,45 +60,59 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             ip.controls = controls;
         },
 
-        register_events: function(){
-            var ip =this.instanceprops;
+        register_events: function() {
+            var ip = this.instanceprops;
 
             //set the submission player src to the ot\rigin
-            ip.controls.me_play.click(function() {
+            ip.controls.me_play.click(function () {
                 var recorder_play_button = $('#' + ip.holderid + '  .poodll_play-recording_fluencybuilder');
                 recorder_play_button.click();
             });
 
-            //when the mode player finishes show our dialog
-            var model_player = $('#' + ip.holderid + '  .poodll_modelplayer_fluencybuilder');
-            model_player.on('ended',function(){
+            //set the dialog popup function to show after the audio model player has ended
+            var endedfunction = function () {
                 //prepare next button
                 var nexttext = M.util.get_string('recui_next', 'mod_fluencybuilder');
-                var buttons ={};
-                buttons[nexttext] =  function() {
-                        $( this ).dialog( "close" );
-                        for(var i=1; i < ip.itemcount+1;i++){
-                            if(ip.currentitem == ip.itemcount){
-                                window.location.replace(M.cfg.wwwroot + '/mod/fluencybuilder/view.php?id=' + ip.cmid);
-                            }
-                            if(ip.currentitem+1==i){
-                                $('#' + 'mod_fluencybuilder_dplaceholder_' + i).show();
-                            }else{
-                                $('#' + 'mod_fluencybuilder_dplaceholder_' + i).hide();
-                            }
+                var buttons = {};
+                buttons[nexttext] = function () {
+                    $(this).dialog("close");
+                    for (var i = 1; i < ip.itemcount + 1; i++) {
+                        if (ip.currentitem == ip.itemcount) {
+                            window.location.replace(M.cfg.wwwroot + '/mod/fluencybuilder/view.php?id=' + ip.cmid);
+                        }
+                        if (ip.currentitem + 1 == i) {
+                            $('#' + 'mod_fluencybuilder_dplaceholder_' + i).show();
+                        } else {
+                            $('#' + 'mod_fluencybuilder_dplaceholder_' + i).hide();
                         }
                     }
+                }
 
-                    //prepare and show dialog
-                    ip.controls.the_dialog.dialog({
-                        dialogClass: 'mod_fluencybuilder_no-close',
-                        resizable: false,
-                        height: "auto",
-                        width: 400,
-                        modal: true,
-                        buttons: buttons
-                    });
-            });
+                //prepare and show dialog
+                ip.controls.the_dialog.dialog({
+                    dialogClass: 'mod_fluencybuilder_no-close',
+                    resizable: false,
+                    height: "auto",
+                    width: 400,
+                    modal: true,
+                    buttons: buttons
+                });
+            };
+
+            //when the mode player finishes show our dialog
+            //we need to do some dumb settimeout here because of javascript load race condtions YUKKY
+            var model_player = $('#' + ip.holderid + '  .poodll_modelplayer_fluencybuilder');
+            if (model_player.length < 1) {
+                var interval_handle = setInterval(function(){
+                    var model_player = $('#' + ip.holderid + '  .poodll_modelplayer_fluencybuilder');
+                    if(model_player.length >0){
+                        clearInterval(interval_handle);
+                        model_player.on('ended', endedfunction);
+                    }
+                }, 500);
+            } else {
+                model_player.on('ended', endedfunction);
+            }
         },
 
 
