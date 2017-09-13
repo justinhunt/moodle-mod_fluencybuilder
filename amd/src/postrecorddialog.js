@@ -43,9 +43,9 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             var title = M.util.get_string('recui_howwasit', 'mod_fluencybuilder');
             var thecontrols = '<div class="hide">';
             thecontrols += '<div class="mod_fluencybuilder_dialogcontentbox" title="' + title + '">';
-            thecontrols +=  '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_play">' + 'me play' + '</button>';
-            thecontrols += '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ok">' + 'me ok' + '</button>';
-            thecontrols += ' <button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ng">' + 'me ng' + '</button>';
+            thecontrols +=  '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_play"><i class="fa fa-play" aria-hidden="true"></i></button>';
+            thecontrols += '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ok"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>';
+            thecontrols += ' <button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ng"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></button>';
             thecontrols += '</div>';//end of dialog div
             thecontrols += '</div>';//end of hide div
 
