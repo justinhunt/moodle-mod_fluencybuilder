@@ -79,23 +79,4 @@ function mod_fluencybuilder_create_sql_in($csvlist){
 			return $sql_in;
 }
 
-//Fetch the total possible grade of a set of fbquestions
-function mod_fluencybuilder_fetch_maxpossiblescore($fbquestionids){
-	global $DB;
-	$total = 1;
-	return $total;
-}
 
-//Fetch the item score of a fbquestion depending on users answer and how long took.
-function mod_fluencybuilder_fetch_itemscore($fbquestionid, $duration, $correct){
-	global $CFG,$DB;
-	$ret = 0;
-	
-	//if we were not even correct, just return 0.
-	if($correct){
-		$ret=1;
-	}else{
-		$ret=0;
-	}
-	return $ret;
-}

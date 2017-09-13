@@ -90,6 +90,9 @@ $redirecturl = new moodle_url('/mod/fluencybuilder/fbquestion/fbquestions.php', 
     	require_sesskey();
 		$success = mod_fluencybuilder_fbquestion_delete_item($fluencybuilder,$itemid,$context);
         redirect($redirecturl);
+    }elseif($action=="moveup" || $action=="movedown"){
+        mod_fluencybuilder_fbquestion_move_item($fluencybuilder,$itemid,$action);
+        redirect($redirecturl);
     }
 
 

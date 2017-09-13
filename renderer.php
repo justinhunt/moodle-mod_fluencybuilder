@@ -70,12 +70,12 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
 
         return $output;
     }
-	
 
 	public function show_items($cm,$fluencybuilder){
 
-
         $ret='';
+
+
         $fluencytest = new \mod_fluencybuilder\fluencytest($cm);
         $items = $fluencytest->fetch_items();
         $itemcount=count($items);
@@ -87,7 +87,7 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
             //recorder
             $resourceurl = $fluencytest->fetch_media_url(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, $item);
             $modelurl = $fluencytest->fetch_media_url(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, $item);
-            $recorder = $fluencytest->prepare_tool($resourceurl, $modelurl, $item);
+            $recorder = $fluencytest->prepare_recorder_tool($resourceurl, $modelurl, $item);
             $itemprogress =  \html_writer::tag('h3',$currentitem . '/' . $itemcount, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemprogress'));
             $itemtext =  \html_writer::tag('div',$fluencybuilder->questionheader, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
 
@@ -117,6 +117,11 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         return $ret;
     }
 
+    public function show_review_screen($cm,$fluencybuilder){
+
+
+    }
+
 	/**
      * Return HTML to display limited header
      */
@@ -140,15 +145,6 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
     }
 
 
-    /**
-     *
-     */
-    public function show_something($showtext) {
-		$ret = $this->output->box_start();
-		$ret .= $this->output->heading($showtext, 4, 'main');
-		$ret .= $this->output->box_end();
-        return $ret;
-    }
 
 	 /**
      *
@@ -321,122 +317,12 @@ class mod_fluencybuilder_json_renderer extends plugin_renderer_base {
 	 * @param stdClass $fluencybuilder
 	 * @return stdClass
 	 */
-	 public function render_session($items) {
-		$session = new stdClass;
-		$session->items = $items;
-		$session->itemcount = count($items);
+	 public function render_result($attemptid,$message) {
+		$result = new stdClass;
+		$result->attemptid = $attemptid;
+		$result->message = $message;
 
-		return json_encode($session);
-	 }
-
-	
-	
-	/**
-	 * Return HTML to display add first page links
-	 * @param lesson $lesson
-	 * @return string
-	 */
-	 public function render_tasks_json($title,$context,$items,$fluencybuilder,$cm) {
-		$config  = get_config(MOD_FLUENCYBUILDER_FRANKY);
-		
-		/*
-		$partnerconfirmitem= new stdClass();
-		$partnerconfirmitem->id = self::PARTNERCONFIRMID;
-		$partnerconfirmitem->type =MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PARTNERCONFIRM;
-		$partnerconfirmitem->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION}= '';
-		array_unshift($items,$partnerconfirmitem);
-		*/
-		
-		
-		//process our tasks
-		$tasks = array();
-		foreach($items as $item){
-			$tasks[] = $this->render_fbquestion($context,$item,$cm);
-		}
-		$test->tasks = $tasks;
-		
-		//build our return object
-		$ret = new stdClass;
-		$ret->test = $test;
-		
-		return json_encode($ret);
-	 }
-	 
-	 public function fetch_item_id($item){
-		switch($item->type){
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:
-				//$return = 'picture_' . $item->id;
-				$return  = $item->id;
-				break;
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
-				//$return = 'listen_' . $item->id;
-				$return  = $item->id;
-				break;
-            case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
-                //$return = 'listen_' . $item->id;
-                $return  = $item->id;
-                break;
-			default:
-				$return  = $item->id;
-		}
-		return $return;
-	 }
-
-	/**
-	 * Return HTML to display add first page links
-	 * @param lesson $lesson
-	 * @return string
-	 */
-	 public function render_fbitem($context,$item,$cm) {
-	 global $DB;
-	 
-		$theitem = new stdClass;
-		$theitem->id = $this->fetch_item_id($item->type, $item);
-		if(!isset($item->timetarget)){
-			$item->timetarget = 0;
-		}
-		$theitem->timetarget=$item->timetarget;
-
-
-	//Items from a different fluencybuilder will have a different context, so we need to fetch
-	//this needs to be optimised: JUSTIN 20160922
-	if(property_exists($item,'fluencybuilder')){
-		$moduleid = $cm->module;
-		$item_cm_id = $DB->get_field('course_modules',
-		'id',array('module'=>$moduleid,'instance'=>$item->fluencybuilder),
-		IGNORE_MULTIPLE);
-		
-		//we have a problem of orphan fbquestions when fluencybuilders are deleted (restored?)
-		//This will stop errors being thrown, but won't deliver the correct context
-		//TO DO Justin 20160922
-		if($item_cm_id){
-			$item_context = context_module::instance($item_cm_id);
-		}else{
-			$item_context = $context;
-		}
-	}else{
-		$item_context = $context;
-	}
-
-		switch($item->type){
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:
-				$theitem->pictureprompt=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT_FILEAREA,$item);
-                $theitem->audiomodel=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA,$item);
-				break;
-				
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
-                $theitem->audioprompt=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA,$item);
-                $theitem->audiomodel=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA,$item);
-				break;
-			
-			case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
-				$theitem->audioprompt=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA,$item);
-                $theitem->audiomodel=$this->fetch_media_url($item_context,MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA,$item);
-				break;
-
-				
-		}
-		return $theitem;
+		return json_encode($result);
 	 }
 
 }

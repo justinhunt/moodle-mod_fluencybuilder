@@ -58,12 +58,22 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
                 me_ng: $('#' + ip.holderid + '  .mod_fluencybuilder_me_ng')
             };
             ip.controls = controls;
+
         },
 
         register_events: function() {
             var ip = this.instanceprops;
+            var that = this;
 
-            //set the submission player src to the ot\rigin
+            ip.controls.me_ok.click(function () {
+                that.send_evaluation('ok');
+            });
+
+            ip.controls.me_ng.click(function () {
+                that.send_evaluation('ng');
+            });
+
+            //set the submission player src to the origin
             ip.controls.me_play.click(function () {
                 var recorder_play_button = $('#' + ip.holderid + '  .poodll_play-recording_fluencybuilder');
                 recorder_play_button.click();
@@ -116,35 +126,8 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
         },
 
 
-        should_be_checked: function(filename){
-            //check this is an unconverted recording that we need to track
-            //log.debug('mediaduration: ' + this.mediaduration);
-            //log.debug('placeholderduration: ' + this.placeholderduration);
 
-            //if any of these numbers is not numeric we kill it
-            if(!$.isNumeric(this.placeholderduration)){return false;}
-            if(!$.isNumeric(this.mediaduration)){return false;}
-            //if the two numbers are equivalent to one decimal place we credit it
-            //firefox calcs mp3 size diff to chrome, but they seem same to 1 place ... now anyway
-            if( parseFloat(this.mediaduration).toFixed(1) !=  parseFloat(this.placeholderduration).toFixed(1)){
-                return false;
-            }
-            //this is a bogus check.
-            //later we only want to check filenames that look like poodll recorded ones
-            if(filename==''){
-                return false;
-            }
-            return true;
-        },
-
-        check_updates: function(filename,checktype){
-            //checktype:firstpass - if have a task then we keep checking till there is no task
-            //then we know its finished. Those checks are the 'secondpass'
-
-            //check this is a recording that we need to track
-            if(checktype=='firstpass' && !this.should_be_checked(filename)){
-                return;
-            }
+        send_evaluation: function(evaluation){
 
             //set up our ajax request
             var xhr = new XMLHttpRequest();
@@ -154,28 +137,22 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             xhr.onreadystatechange = function(e){
                 if(this.readyState===4){
                     if(xhr.status==200){
-                        log.debug('ok we got a mediarefresh response');
+                        log.debug('ok we got an attempt update response');
                         //get a yes or forgetit or tryagain
                         var payload = xhr.responseText;
                         var payloadobject = JSON.parse(payload);
                         if(payloadobject){
-                            switch(payloadobject.code) {
-
-                                case 'mediaready':
-                                    that.alertconverted();
-                                    break;
-                                case 'stillwaiting':
-                                        setTimeout(function(){that.check_updates(filename,'secondpass')}, 15000);
-                                    break;
-                                case 'notask':
-                                    if(checktype=='secondpass'){
-                                        that.alertconverted();
+                            switch(payloadobject.message) {
+                                case 'noted':
+                                    log.debug('attempted item evaluation accepted');
+                                    if(payloadobject.attemptid != window.attemptid){
+                                        window.attemptid=payloadobject.attemptid;
                                     }
                                     break;
-                                case 'notloggedin':
+
+                                case 'problem':
                                 default:
-                                    //just stop trying in this case
-                                    //the task is long ago processed or its not a rec. or something
+                                    log.debug('attempted item evaluation failure');
                             }
                         }
                      }else{
@@ -184,9 +161,14 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
                 }
             };
 
-            //log.debug(params);
-            var params = "filename=" + filename;
-            xhr.open("POST",M.cfg.wwwroot + '/filter/poodll/ajaxmediaquery.php', true);
+            //use already created attemptid if we have one
+            var attemptid=0;
+            if(window.attemptid) {
+                attemptid = window.attemptid;
+            }
+
+            var params = "itemid=" + that.itemid + "&cmid=" + that.cmid + "&eval=" + evaluation + '&attemptid=' + attemptid;
+            xhr.open("POST",M.cfg.wwwroot + '/mod/fluencybuilder/jsonresults.php', true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.setRequestHeader("Cache-Control", "no-cache");
             xhr.send(params);

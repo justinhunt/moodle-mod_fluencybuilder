@@ -56,7 +56,12 @@ class fluencytest
         }
     }
 
-    public function prepare_tool($resourceurl, $modelurl, $item){
+    public function prepare_review_widget($resourceurl, $modelurl, $item){
+
+
+    }
+
+    public function prepare_recorder_tool($resourceurl, $modelurl, $item){
         global $USER;
 
         $oldfilename="";

@@ -28,7 +28,25 @@
 
 defined('MOODLE_INTERNAL') || die();
 
- 
+
+
+    function mod_fluencybuilder_fbquestion_move_item($fluencybuilder, $moveitemid, $direction)
+    {
+        global $DB;
+        $ret = false;
+
+        if ($items = $DB->get_records(MOD_FLUENCYBUILDER_FBQUESTION_TABLE, array('fluencybuilder' => $fluencybuilder->id),'itemorder ASC')) {
+            print_error("Could not fetch items for ordering");
+            return $ret;
+        }
+
+        foreach($items as $item){
+            if($item->id == $moveitemid){
+
+            }
+        }
+
+    }
    
    function mod_fluencybuilder_fbquestion_delete_item($fluencybuilder, $itemid, $context) {
 		global $DB;

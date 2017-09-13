@@ -79,9 +79,9 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
 			get_string('itemtype', 'fluencybuilder'),
 			get_string('actions', 'fluencybuilder')
 		);
-		$table->headspan = array(1,1,2);
+		$table->headspan = array(1,1,3);
 		$table->colclasses = array(
-			'itemname', 'itemtitle', 'edit','delete'
+			'itemname', 'itemtitle', 'order', 'edit','delete'
 		);
 
 		//sort by start date
@@ -112,16 +112,19 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
 			$editurl = new moodle_url($actionurl, array('id'=>$cm->id,'itemid'=>$item->id));
 			$editlink = html_writer::link($editurl, get_string('edititem', 'fluencybuilder'));
 			$editcell = new html_table_cell($editlink);
-			
-			//$previewlink = $this->fetch_preview_link($item->id,$fluencybuilder->id);
-			//$previewcell = new html_table_cell($previewlink);
+
+            $upurl = new moodle_url($actionurl, array('id'=>$cm->id,'itemid'=>$item->id,'action'=>'moveup'));
+            $uplink = html_writer::link($upurl, get_string('moveitemup', 'fluencybuilder'));
+            $downurl = new moodle_url($actionurl, array('id'=>$cm->id,'itemid'=>$item->id,'action'=>'movedown'));
+            $downlink = html_writer::link($downurl, get_string('moveitemdown', 'fluencybuilder'));
+            $movecell = new html_table_cell($uplink . ' ' . $downlink);
 		
 			$deleteurl = new moodle_url($actionurl, array('id'=>$cm->id,'itemid'=>$item->id,'action'=>'confirmdelete'));
 			$deletelink = html_writer::link($deleteurl, get_string('deleteitem', 'fluencybuilder'));
 			$deletecell = new html_table_cell($deletelink);
 
 			$row->cells = array(
-				$itemnamecell, $itemtypecell, $editcell, $deletecell
+				$itemnamecell, $itemtypecell, $movecell, $editcell, $deletecell
 			);
 			$table->data[] = $row;
 		}
