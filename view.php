@@ -118,13 +118,23 @@ if(has_capability('mod/fluencybuilder:preview',$modulecontext)){
 echo $renderer->heading($moduleinstance->name,2);
 echo $renderer->show_intro($moduleinstance,$cm);
 
+
+//lets fetch our attempts
+$attempts =  $DB->get_records(MOD_FLUENCYBUILDER_ATTEMPTTABLE,array('userid'=>$USER->id, MOD_FLUENCYBUILDER_MODNAME.'id'=>$moduleinstance->id),'id DESC');
+
+
+if($attempts) {
+    echo $renderer->show_attempt_review($cm);
+}
+
+
 //if we have too many attempts, lets report that.
 if($moduleinstance->maxattempts > 0){
-	$attempts =  $DB->get_records(MOD_FLUENCYBUILDER_USERTABLE,array('userid'=>$USER->id, MOD_FLUENCYBUILDER_MODNAME.'id'=>$moduleinstance->id));
 	if($attempts && count($attempts)<$moduleinstance->maxattempts){
 		echo get_string("exceededattempts",MOD_FLUENCYBUILDER_LANG,$moduleinstance->maxattempts);
 	}
 }
+
 
 echo $renderer->fetch_newsessionlink($cm,$moduleinstance);
 

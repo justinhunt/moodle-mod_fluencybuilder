@@ -71,7 +71,7 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
 		//items
         $items = new backup_nested_element('items');
         $item = new backup_nested_element('item', array('id'),array(
-			MOD_FLUENCYBUILDER_MODNAME ."id","course","userid","attemptid","fbquestionid","itemid","points","correct","duration","timecreated","timemodified"
+			MOD_FLUENCYBUILDER_MODNAME ."id","course","userid","attemptid","itemid","points","correct","duration","timecreated","timemodified"
 		));
 
 		

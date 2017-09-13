@@ -117,9 +117,32 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         return $ret;
     }
 
-    public function show_review_screen($cm,$fluencybuilder){
+    public function show_attempt_review($cm){
+
+	    global $USER;
+
+        $fluencytest = new \mod_fluencybuilder\fluencytest($cm);
+        $items = $fluencytest->fetch_items();
+        $latestattempt = $fluencytest->fetch_latest_attempt($USER->id);
+        $attemptitems = $fluencytest->fetch_attemptitems($USER->id,$latestattempt->id);
+
+        $score = \html_writer::div('SCORE: ' .$latestattempt->sessionscore . '%',MOD_FLUENCYBUILDER_CLASS  . '_sessionscore');
 
 
+        $rows='';
+        foreach ($items as $item){
+            $row = \html_writer::div($item->itemorder,MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemorder');
+            $row .= \html_writer::div($item->name,MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemname');
+            if(array_key_exists($item->id,$attemptitems)){
+                $answer = $attemptitems[$item->id];
+            }else{
+                $answer = 'n/a';
+            }
+            $row .= \html_writer::div($answer,MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_answer');
+            $rows .= \html_writer::div($row,MOD_FLUENCYBUILDER_CLASS  . '_reviewrow');
+
+        }
+        return $score . $rows;
     }
 
 	/**

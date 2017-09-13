@@ -397,13 +397,13 @@ class mod_fluencybuilder_latestattemptsummary_report extends mod_fluencybuilder_
 		$emptydata = array();
 		
 		$itemarray= $DB->get_fieldset_select(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE,
-		'fbquestionid', 'fluencybuilderid = ?',array($moduleinstance->id));
+		'itemid', 'fluencybuilderid = ?',array($moduleinstance->id));
 		$items = array_unique($itemarray);
 		
 		//print_r($items);
 				
 		$sql ='SELECT *, MAX(attemptid) as maxattemptid FROM {' . MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE . '} ';
-		$sql .= 'WHERE fluencybuilderid =? AND fbquestionid IN ('. implode(',',$items) .') GROUP BY userid,fbquestionid';
+		$sql .= 'WHERE fluencybuilderid =? AND itemid IN ('. implode(',',$items) .') GROUP BY userid,itemid';
 		
 		//echo $sql;
 		//die;
@@ -440,8 +440,7 @@ class mod_fluencybuilder_latestattemptsummary_report extends mod_fluencybuilder_
 				}
 			}
 			//stash the slide pair data
-			$rawdatarow->{'item_correct_' . $useritem->fbquestionid}=$useritem->correct;
-			$rawdatarow->{'item_duration_' . $useritem->fbquestionid}=$useritem->duration;
+			$rawdatarow->{'item_correct_' . $useritem->itemid}=$useritem->correct;
 		}
 		if($rawdatarow){
 			$this->rawdata[]= $rawdatarow;
@@ -488,12 +487,11 @@ class mod_fluencybuilder_oneattempt_report extends  mod_fluencybuilder_base_repo
 						break;
 				
 				case 'fbquestionname':
-						$thefbquestion = $this->fetch_cache(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,$record->fbquestionid);
+						$thefbquestion = $this->fetch_cache(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,$record->itemid);
 						$ret=$thefbquestion->name;
 					break;
 					
 				case 'correct':
-						$theuser = $this->fetch_cache('user',$record->partnerid);
 						$ret=$record->correct ? get_string('yes') : get_string('no');
 					break;
 				
@@ -562,24 +560,24 @@ class mod_fluencybuilder_allfbquestions_report extends  mod_fluencybuilder_base_
 				global $DB;
 			switch($field){
 				case 'id':
-						$ret = $record->fbquestionid;
+						$ret = $record->itemid;
 						if($withlinks){
 							$onefbquestionurl = new moodle_url('/mod/fluencybuilder/reports.php', 
 									array('n'=>$record->fluencybuilderid,
 									'report'=>'onefbquestion',
-									'itemid'=>$record->fbquestionid));
+									'itemid'=>$record->itemid));
 								$ret = html_writer::link($onefbquestionurl,$ret);
 						}
 						break;
 						break;
 				
 				case 'fbquestionname':
-						$thefbquestion = $this->fetch_cache(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,$record->fbquestionid);
+						$thefbquestion = $this->fetch_cache(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,$record->itemid);
 						$ret=$thefbquestion->name;
 					break;
 					
 				case 'count':
-						$ret=$record->cntfbquestionid;
+						$ret=$record->cntitemid;
 					break;
 				
 				case 'avgcorrect':
@@ -616,7 +614,7 @@ class mod_fluencybuilder_allfbquestions_report extends  mod_fluencybuilder_base_
 		$this->headingdata = new stdClass();
 		
 		$emptydata = array();
-		$alldata= $DB->get_records_sql('SELECT fbquestionid,fluencybuilderid,COUNT(fbquestionid) AS cntfbquestionid, AVG(correct) AS avgcorrect,AVG(duration) AS avgtotaltime FROM {'.	MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE.'} WHERE fluencybuilderid=:fluencybuilderid GROUP BY fbquestionid',array('fluencybuilderid'=>$moduleinstance->id));
+		$alldata= $DB->get_records_sql('SELECT itemid,fluencybuilderid,COUNT(itemid) AS cntitemid, AVG(correct) AS avgcorrect  FROM {'.	MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE.'} WHERE fluencybuilderid=:fluencybuilderid GROUP BY itemid',array('fluencybuilderid'=>$moduleinstance->id));
 
 		if($alldata){
 			$this->rawdata= $alldata;
@@ -696,7 +694,7 @@ class mod_fluencybuilder_onefbquestion_report extends  mod_fluencybuilder_base_r
 		$this->headingdata = new stdClass();
 		
 		$emptydata = array();
-		$alldata = $DB->get_records(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE,array('fbquestionid'=>$formdata->fbquestionitemid,'course'=>$moduleinstance->course,'fluencybuilderid'=>$moduleinstance->id));
+		$alldata = $DB->get_records(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE,array('itemid'=>$formdata->itemid,'course'=>$moduleinstance->course,'fluencybuilderid'=>$moduleinstance->id));
 		if($alldata){
 			$this->rawdata= $alldata;
 		}else{

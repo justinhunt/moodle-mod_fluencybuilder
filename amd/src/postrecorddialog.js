@@ -107,10 +107,11 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
                     modal: true,
                     buttons: buttons
                 });
+                ip.controls.the_dialog.buttons.button('disable');
             };
 
             //when the mode player finishes show our dialog
-            //we need to do some dumb settimeout here because of javascript load race condtions YUKKY
+            //we need to do some dumb setInterval here because of javascript load race condtions YUKKY
             var model_player = $('#' + ip.holderid + '  .poodll_modelplayer_fluencybuilder');
             if (model_player.length < 1) {
                 var interval_handle = setInterval(function(){

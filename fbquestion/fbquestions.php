@@ -32,7 +32,9 @@ $cm = get_coursemodule_from_id('fluencybuilder', $id, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 //$fluencybuilder = new fluencybuilder($DB->get_record('fluencybuilder', array('id' => $cm->instance), '*', MUST_EXIST));
 $fluencybuilder = $DB->get_record('fluencybuilder', array('id' => $cm->instance), '*', MUST_EXIST);
-$items = $DB->get_records(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,array('fluencybuilder'=>$fluencybuilder->id),'name ASC');
+
+$fluencytest = new \mod_fluencybuilder\fluencytest($cm);
+$items = $fluencytest->fetch_items();
 
 //mode is necessary for tabs
 $mode='fbquestions';

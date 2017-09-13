@@ -71,7 +71,7 @@ $redirecturl = new moodle_url('/mod/fluencybuilder/fbquestion/fbquestions.php', 
 
 	//handle delete actions
     if($action == 'confirmdelete'){
-    	$usecount = $DB->count_records(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE,array('fbquestionid'=>$itemid));
+    	$usecount = $DB->count_records(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE,array('itemid'=>$itemid));
     	if($usecount>0){
     		redirect($redirecturl,get_string('iteminuse','fluencybuilder'),10);
     	}
@@ -164,6 +164,16 @@ if ($data = $mform->get_data()) {
 			$theitem->timecreated=time();			
 			$theitem->createdby=$USER->id;
 
+			//get itemorder
+            $fluencytest = new \mod_fluencybuilder\fluencytest($cm);
+            $currentitems = $fluencytest->fetch_items();
+            if(count($currentitems)>0){
+                $lastitem = array_pop($currentitems);
+                $itemorder = $lastitem->itemorder +1;
+            } else{
+                $itemorder=1;
+            }
+            $theitem->itemorder=$itemorder;
 
 			//create a fbquestionkey
 			$theitem->fbquestionkey = mod_fluencybuilder_create_fbquestionkey();

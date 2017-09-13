@@ -33,21 +33,40 @@ defined('MOODLE_INTERNAL') || die();
     function mod_fluencybuilder_fbquestion_move_item($fluencybuilder, $moveitemid, $direction)
     {
         global $DB;
-        $ret = false;
 
-        if ($items = $DB->get_records(MOD_FLUENCYBUILDER_FBQUESTION_TABLE, array('fluencybuilder' => $fluencybuilder->id),'itemorder ASC')) {
+        switch($direction){
+            case 'moveup':
+                $sort = 'itemorder ASC';
+                break;
+            case 'movedown':
+                $sort = 'itemorder DESC';
+                break;
+            default:
+                //inconceivable that we should ever arrive here.
+                return;
+        }
+
+        if (!$items = $DB->get_records(MOD_FLUENCYBUILDER_FBQUESTION_TABLE, array('fluencybuilder' => $fluencybuilder->id),$sort)) {
             print_error("Could not fetch items for ordering");
-            return $ret;
+            return;
         }
 
+        $prioritem = null;
         foreach($items as $item){
-            if($item->id == $moveitemid){
+            if($item->id == $moveitemid && $prioritem!=null){
+                $currentitemorder =$item->itemorder;
+                $item->itemorder=$prioritem->itemorder;
+                $prioritem->itemorder=$currentitemorder;
 
-            }
-        }
+                //Set the new sort order
+                $DB->set_field(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,'itemorder',$item->itemorder,array('id'=>$item->id));
+                $DB->set_field(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,'itemorder',$prioritem->itemorder,array('id'=>$prioritem->id));
+                break;
+            }//end of if
+            $prioritem=$item;
+        }//end of for each
+    }//end of move item function
 
-    }
-   
    function mod_fluencybuilder_fbquestion_delete_item($fluencybuilder, $itemid, $context) {
 		global $DB;
 		$ret = false;

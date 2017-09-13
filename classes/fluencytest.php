@@ -47,10 +47,39 @@ class fluencytest
     {
         global $DB;
         if (!$this->items) {
-            $this->items = $DB->get_records('fluencybuilder_fbquestions', ['fluencybuilder' => $this->mod->id]);
+            $this->items = $DB->get_records('fluencybuilder_fbquestions', ['fluencybuilder' => $this->mod->id],'itemorder ASC');
         }
         if($this->items){
             return $this->items;
+        }else{
+            return [];
+        }
+    }
+
+    public function fetch_latest_attempt($userid){
+        global $DB;
+
+        $attempts = $DB->get_records(MOD_FLUENCYBUILDER_ATTEMPTTABLE,array('fluencybuilderid' => $this->mod->id,'userid'=>$userid),'id DESC');
+        if($attempts){
+            $attempt = array_shift($attempts);
+            return $attempt;
+        }else{
+            return false;
+        }
+    }
+
+
+    public function fetch_attemptitems($userid, $attemptid=0)
+    {
+        global $DB;
+
+        if($attemptid==0){
+            $attempt = $this->fetch_latest_attempt($userid);
+            $attemptid = $attempt->id;
+        }
+        $attemptitems = $DB->get_records_menu(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE, array('fluencybuilderid' => $this->mod->id,'userid'=>$userid,'attemptid'=>$attemptid),'itemid ASC', 'itemid,correct');
+        if($attemptitems){
+            return $attemptitems;
         }else{
             return [];
         }

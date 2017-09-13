@@ -89,35 +89,45 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
 		//core_collator::asort_objects_by_property($items,'name',core_collator::SORT_STRING);
 
 		//loop through the items and add to table
+        $currentitem=0;
 		foreach ($items as $item) {
-			$row = new html_table_row();
-		
-		
-			$itemnamecell = new html_table_cell($item->name);	
-			switch($item->type){
-				case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:
-					$itemtype = get_string('picturechoice','fluencybuilder');
-					break;
-				case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
-					$itemtype = get_string('audiochoice','fluencybuilder');
-					break;
-				case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
-					$itemtype = get_string('textchoice','fluencybuilder');
-					break;
-				default:
-			} 
-			$itemtypecell = new html_table_cell($itemtype);
-		
-			$actionurl = '/mod/fluencybuilder/fbquestion/managefbquestions.php';
-			$editurl = new moodle_url($actionurl, array('id'=>$cm->id,'itemid'=>$item->id));
-			$editlink = html_writer::link($editurl, get_string('edititem', 'fluencybuilder'));
-			$editcell = new html_table_cell($editlink);
+            $currentitem++;
+            $row = new html_table_row();
 
-            $upurl = new moodle_url($actionurl, array('id'=>$cm->id,'itemid'=>$item->id,'action'=>'moveup'));
-            $uplink = html_writer::link($upurl, get_string('moveitemup', 'fluencybuilder'));
-            $downurl = new moodle_url($actionurl, array('id'=>$cm->id,'itemid'=>$item->id,'action'=>'movedown'));
-            $downlink = html_writer::link($downurl, get_string('moveitemdown', 'fluencybuilder'));
-            $movecell = new html_table_cell($uplink . ' ' . $downlink);
+
+            $itemnamecell = new html_table_cell($item->name);
+            switch ($item->type) {
+                case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_PICTUREPROMPT:
+                    $itemtype = get_string('picturechoice', 'fluencybuilder');
+                    break;
+                case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_AUDIOPROMPT:
+                    $itemtype = get_string('audiochoice', 'fluencybuilder');
+                    break;
+                case MOD_FLUENCYBUILDER_FBQUESTION_TYPE_TEXTPROMPT:
+                    $itemtype = get_string('textchoice', 'fluencybuilder');
+                    break;
+                default:
+            }
+            $itemtypecell = new html_table_cell($itemtype);
+
+            $actionurl = '/mod/fluencybuilder/fbquestion/managefbquestions.php';
+            $editurl = new moodle_url($actionurl, array('id' => $cm->id, 'itemid' => $item->id));
+            $editlink = html_writer::link($editurl, get_string('edititem', 'fluencybuilder'));
+            $editcell = new html_table_cell($editlink);
+
+            $movecell_content='';
+            if ($currentitem > 1) {
+                $upurl = new moodle_url($actionurl, array('id' => $cm->id, 'itemid' => $item->id, 'action' => 'moveup'));
+                $uplink = html_writer::link($upurl, get_string('moveitemup', 'fluencybuilder'));
+                $movecell_content .= $uplink;
+            }
+            $movecell_content.=' ';
+            if ($currentitem < count($items)) {
+                $downurl = new moodle_url($actionurl, array('id' => $cm->id, 'itemid' => $item->id, 'action' => 'movedown'));
+                $downlink = html_writer::link($downurl, get_string('moveitemdown', 'fluencybuilder'));
+                $movecell_content .= $downlink;
+            }
+            $movecell = new html_table_cell($movecell_content);
 		
 			$deleteurl = new moodle_url($actionurl, array('id'=>$cm->id,'itemid'=>$item->id,'action'=>'confirmdelete'));
 			$deletelink = html_writer::link($deleteurl, get_string('deleteitem', 'fluencybuilder'));
