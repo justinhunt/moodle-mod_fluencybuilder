@@ -92,6 +92,9 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
                         }
                         if (ip.currentitem + 1 == i) {
                             $('#' + 'mod_fluencybuilder_dplaceholder_' + i).show();
+                            //begin playing the audio on the next item
+                            var resource_play_button= $('#' + 'mod_fluencybuilder_dplaceholder_' + i + ' .poodll_play-resource_fluencybuilder');
+                            resource_play_button.click();
                         } else {
                             $('#' + 'mod_fluencybuilder_dplaceholder_' + i).hide();
                         }
@@ -107,7 +110,7 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
                     modal: true,
                     buttons: buttons
                 });
-                ip.controls.the_dialog.buttons.button('disable');
+                //ip.controls.the_dialog.buttons.button('disable');
             };
 
             //when the mode player finishes show our dialog

@@ -122,12 +122,6 @@ echo $renderer->show_intro($moduleinstance,$cm);
 //lets fetch our attempts
 $attempts =  $DB->get_records(MOD_FLUENCYBUILDER_ATTEMPTTABLE,array('userid'=>$USER->id, MOD_FLUENCYBUILDER_MODNAME.'id'=>$moduleinstance->id),'id DESC');
 
-
-if($attempts) {
-    echo $renderer->show_attempt_review($cm);
-}
-
-
 //if we have too many attempts, lets report that.
 if($moduleinstance->maxattempts > 0){
 	if($attempts && count($attempts)<$moduleinstance->maxattempts){
@@ -137,13 +131,22 @@ if($moduleinstance->maxattempts > 0){
         return;
     }
 }
+
+$finaloutput ='';
+if($attempts) {
+    $finaloutput .= $renderer->show_attempt_review($cm);
+}
+
 if($attempts){
     $caption = get_string('tryactivityagain',MOD_FLUENCYBUILDER_LANG);
 }else{
     $caption = get_string('gotoactivity',MOD_FLUENCYBUILDER_LANG);
 }
 
-echo $renderer->fetch_newsessionlink($moduleinstance,$caption);
+$finaloutput .= $renderer->fetch_newsession_button($moduleinstance,$caption);
+
+echo $renderer->containerwrap($finaloutput);
+
 
 // Finish the page
 echo $renderer->footer();

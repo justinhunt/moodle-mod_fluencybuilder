@@ -115,6 +115,7 @@ $string['iscorrectlabel'] = 'Correct/Incorrect';
 $string['textchoice'] = 'Audio/Text Choice';
 $string['correcttranslationtitle'] = 'Correct Translation';
 $string['audiochoice'] = 'Audio Choice';
+$string['audioprompt'] = 'Audio Prompt';
 $string['edit'] = 'Edit';
 $string['gotoactivity'] = 'Start Activity';
 $string['tryactivityagain'] = 'Try Again';

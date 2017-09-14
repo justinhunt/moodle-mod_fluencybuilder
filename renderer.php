@@ -71,6 +71,11 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /*
+     * Show the list of recorders and dialogs for display on the activity page
+     * Most will be hidden until it is their turn to e displayed
+     *
+     */
 	public function show_items($cm,$fluencybuilder){
 
         $ret='';
@@ -82,7 +87,8 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         $currentitem=0;
         foreach($items as $item) {
             $currentitem++;
-            $showorhide= $currentitem==1 ? '' : 'hide';
+            //$showorhide= $currentitem==1 '' : 'hide';
+            $showorhide= 'hide';
 
             //recorder
             $resourceurl = $fluencytest->fetch_media_url(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, $item);
@@ -164,9 +170,13 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
 
             $rows .= $row;
         }
-        $rows = \html_writer::div($rows, 'container ' .  MOD_FLUENCYBUILDER_CLASS  . '_reviewcontainer');
+
         $attemptdetails = $this->output->heading(get_string('attemptdetails_header',MOD_FLUENCYBUILDER_LANG),5);
         return $attempt_summary . $attemptdetails . $rows;
+    }
+
+    public function containerwrap($content){
+        return \html_writer::div($content, 'container-fluid ' .  MOD_FLUENCYBUILDER_CLASS  . '_container');
     }
 
 	/**
@@ -177,7 +187,7 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
       }
 
 
-	public function fetch_newsessionlink($fluencybuilder,$caption) {
+	public function fetch_newsession_button($fluencybuilder,$caption) {
 		global $CFG;
 		$urlparams = array('n'=>$fluencybuilder->id,);
         $link = new moodle_url($CFG->wwwroot . '/mod/fluencybuilder/activity.php',$urlparams);
@@ -186,9 +196,18 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
 
     }
 
+    public function fetch_start_button() {
+        $buttonid = MOD_FLUENCYBUILDER_CLASS  . '_startbutton';
+        $caption =  get_string('gotoactivity',MOD_FLUENCYBUILDER_LANG);
+        $ret =  html_writer::link('#', $caption,array('id'=>$buttonid,'class'=>'btn btn-primary ' . MOD_FLUENCYBUILDER_CLASS  . '_startbutton'));
+        $opts=array('startbuttonid' => $buttonid);
+        $this->page->requires->js_call_amd("mod_fluencybuilder/startactivitybutton", 'init', array($opts));
+        return $ret;
+
+    }
 
 
-	 /**
+    /**
      *
      */
 	public function show_intro($fluencybuilder,$cm){

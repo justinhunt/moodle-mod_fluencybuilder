@@ -79,7 +79,7 @@ $PAGE->set_url('/mod/fluencybuilder/activity.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
-$PAGE->set_pagelayout('course');
+$PAGE->set_pagelayout('popup');
 
 
 //This puts all our display logic into the renderer.php file in this plugin
@@ -102,6 +102,7 @@ if($moduleinstance->maxattempts > 0){
 
 
 echo $renderer->show_items($cm,$moduleinstance);
+echo $renderer->fetch_start_button();
 
 
 
