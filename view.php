@@ -132,11 +132,18 @@ if($attempts) {
 if($moduleinstance->maxattempts > 0){
 	if($attempts && count($attempts)<$moduleinstance->maxattempts){
 		echo get_string("exceededattempts",MOD_FLUENCYBUILDER_LANG,$moduleinstance->maxattempts);
-	}
+        // Finish the page
+        echo $renderer->footer();
+        return;
+    }
+}
+if($attempts){
+    $caption = get_string('tryactivityagain',MOD_FLUENCYBUILDER_LANG);
+}else{
+    $caption = get_string('gotoactivity',MOD_FLUENCYBUILDER_LANG);
 }
 
-
-echo $renderer->fetch_newsessionlink($cm,$moduleinstance);
+echo $renderer->fetch_newsessionlink($moduleinstance,$caption);
 
 // Finish the page
 echo $renderer->footer();

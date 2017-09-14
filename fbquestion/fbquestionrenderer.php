@@ -116,15 +116,20 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
             $editcell = new html_table_cell($editlink);
 
             $movecell_content='';
+            $spacer = '<img src="' . $this->output->pix_url('spacer') . '" class="iconsmall" alt="" />';
             if ($currentitem > 1) {
                 $upurl = new moodle_url($actionurl, array('id' => $cm->id, 'itemid' => $item->id, 'action' => 'moveup'));
-                $uplink = html_writer::link($upurl, get_string('moveitemup', 'fluencybuilder'));
+               // $uplink = html_writer::link($upurl,  new pix_icon('t/up', get_string('up'), '', array('class' => 'iconsmall')));
+                $uplink = $this->output->action_icon($upurl,new pix_icon('t/up', get_string('up'), '', array('class' => 'iconsmall')));
                 $movecell_content .= $uplink;
+            }else{
+                $movecell_content .= $spacer;
             }
-            $movecell_content.=' ';
+
             if ($currentitem < count($items)) {
                 $downurl = new moodle_url($actionurl, array('id' => $cm->id, 'itemid' => $item->id, 'action' => 'movedown'));
-                $downlink = html_writer::link($downurl, get_string('moveitemdown', 'fluencybuilder'));
+                //$downlink = html_writer::link($downurl,  new pix_icon('t/down', get_string('down'), '', array('class' => 'iconsmall')));
+                $downlink = $this->output->action_icon($downurl,new pix_icon('t/down', get_string('down'), '', array('class' => 'iconsmall')));
                 $movecell_content .= $downlink;
             }
             $movecell = new html_table_cell($movecell_content);

@@ -1,4 +1,11 @@
 
+.mod_fluencybuilder_attemptsummary {
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+}
+
+
 .mod_fluencybuilder_no-close .ui-dialog-titlebar-close {
 	display: none;
 }
@@ -64,32 +71,4 @@ div.mod_fluencybuilder_actionbuttons {
 }
 .generaltable.mod_fluencybuilder_session_choosertable  td.buttoncontainer{
 	width: 10%;
-}
-
-div.mod_fluencybuilder_session_activitylist{
-	padding: 5px;
-}
-div.mod_fluencybuilder_session_activitylistitem{
-	padding-top: 10px;
-}
-
-div.mod_fluencybuilder_session_actionbuttons {
-	display: flex;
-	float: left;
-	padding: 10px;
-	vertical-align: bottom;
-}
-div.mod_fluencybuilder_session_choosebutton {
-	display: flex;
-	float: right;
-	padding: 10px;
-	vertical-align: bottom;
-}
-
-div.mod_fluencybuilder_session_noactivities{
-	padding: 20px;
-	margin: auto;
-	width: 70%;
-	text-align: center;
-	color: #FF0000;
 }

@@ -117,6 +117,15 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         return $ret;
     }
 
+    public function show_attempt_summary($attempt){
+
+        $heading = $this->output->heading(get_string('attemptsummary_header',MOD_FLUENCYBUILDER_LANG),3);
+        $score = \html_writer::div(get_string('summarysessionscore',MOD_FLUENCYBUILDER_LANG,$attempt->sessionscore ),'col-xs-2 col-sm-2 ' . MOD_FLUENCYBUILDER_CLASS  . '_sessionscore');
+        $date = \html_writer::div(date("Y-m-d H:i:s",$attempt->timecreated),'col-xs-2 col-sm-2 ' . MOD_FLUENCYBUILDER_CLASS  . '_sessiondate');
+        $summary= \html_writer::div($date . $score,'row ' . MOD_FLUENCYBUILDER_CLASS  . '_attemptsummary');
+        return $heading . $summary;
+    }
+
     public function show_attempt_review($cm){
 
 	    global $USER;
@@ -126,23 +135,38 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         $latestattempt = $fluencytest->fetch_latest_attempt($USER->id);
         $attemptitems = $fluencytest->fetch_attemptitems($USER->id,$latestattempt->id);
 
-        $score = \html_writer::div('SCORE: ' .$latestattempt->sessionscore . '%',MOD_FLUENCYBUILDER_CLASS  . '_sessionscore');
+        $attempt_summary = $this->show_attempt_summary($latestattempt);
 
+        $rowtemplate = \html_writer::div('@@itemorder@@','col-xs-3 col-sm-3 ' . MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemorder');
+        $rowtemplate .= \html_writer::div('@@itemname@@','col-xs-3 col-sm-3 ' . MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemname');
+        $rowtemplate .= \html_writer::div('@@answer@@', 'col-xs-3 col-sm-3 ' .  MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_answer');
+        $rowtemplate = \html_writer::div($rowtemplate,'row ' .  MOD_FLUENCYBUILDER_CLASS  . '_reviewrow');
 
+        //initialise rows
         $rows='';
-        foreach ($items as $item){
-            $row = \html_writer::div($item->itemorder,MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemorder');
-            $row .= \html_writer::div($item->name,MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemname');
-            if(array_key_exists($item->id,$attemptitems)){
-                $answer = $attemptitems[$item->id];
-            }else{
-                $answer = 'n/a';
-            }
-            $row .= \html_writer::div($answer,MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_answer');
-            $rows .= \html_writer::div($row,MOD_FLUENCYBUILDER_CLASS  . '_reviewrow');
 
+        //details header
+        $row = str_replace('@@itemorder@@','<strong>' .get_string('itemorder',MOD_FLUENCYBUILDER_LANG) . '</strong>',$rowtemplate);
+        $row = str_replace('@@itemname@@','<strong>' .get_string('itemname',MOD_FLUENCYBUILDER_LANG) . '</strong>',$row);
+        $row = str_replace('@@answer@@','<strong>' . get_string('correct',MOD_FLUENCYBUILDER_LANG) . '</strong>',$row);
+        $rows .= $row;
+
+        foreach ($items as $item){
+            $row = str_replace('@@itemorder@@',$item->itemorder,$rowtemplate);
+            $row = str_replace('@@itemname@@',$item->name,$row);
+
+            if(array_key_exists($item->id,$attemptitems)){
+                $answer = $attemptitems[$item->id] ? 'O' : 'X';
+            }else{
+                $answer = '--';
+            }
+            $row = str_replace('@@answer@@',$answer,$row);
+
+            $rows .= $row;
         }
-        return $score . $rows;
+        $rows = \html_writer::div($rows, 'container ' .  MOD_FLUENCYBUILDER_CLASS  . '_reviewcontainer');
+        $attemptdetails = $this->output->heading(get_string('attemptdetails_header',MOD_FLUENCYBUILDER_LANG),5);
+        return $attempt_summary . $attemptdetails . $rows;
     }
 
 	/**
@@ -153,16 +177,11 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
       }
 
 
-	public function fetch_newsessionlink($cm, $fluencybuilder) {
-		global $CFG,$USER;
-		//$activityid = $cm->id;
-		//$sesskey = $USER->sesskey;
-		//$userid = $USER->id;
-
+	public function fetch_newsessionlink($fluencybuilder,$caption) {
+		global $CFG;
 		$urlparams = array('n'=>$fluencybuilder->id,);
-
         $link = new moodle_url($CFG->wwwroot . '/mod/fluencybuilder/activity.php',$urlparams);
-        $ret =  html_writer::link($link, get_string('gotoactivity',MOD_FLUENCYBUILDER_LANG));
+        $ret =  html_writer::link($link, $caption,array('class'=>'btn btn-primary ' . MOD_FLUENCYBUILDER_CLASS  . '_startbutton'));
         return $ret;
 
     }

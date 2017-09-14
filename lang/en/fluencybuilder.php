@@ -85,8 +85,10 @@ $string['itemcontents'] = 'Item Description';
 $string['answer'] = 'Answer';
 $string['saveitem'] = 'Save item';
 $string['audioitemfile'] = 'item Audio(MP3)';
-$string['itemname'] = 'item Name';
-$string['itemtype'] = 'item Type';
+$string['itemname'] = 'Item Name';
+$string['itemorder'] = 'Item Order';
+$string['correct'] = 'Correct';
+$string['itemtype'] = 'Item Type';
 $string['actions'] = 'Actions';
 $string['edititem'] = 'Edit item';
 $string['previewitem'] = 'Preview item';
@@ -98,7 +100,6 @@ $string['confirmattemptdelete'] = 'Are you sure you want to <i>DELETE</i> this a
 $string['confirmattemptdeletealltitle'] = 'Really Delete ALL Attempts?';
 $string['confirmattemptdeleteall'] = 'Are you sure you want to <i>DELETE ALL</i> attempts?';
 $string['noitems'] = 'This quiz contains no questions';
-$string['itemname'] = 'item Name';
 $string['itemdetails'] = 'item Details: {$a}'; 
 $string['itemsummary'] = 'item Summary: {$a}'; 
 $string['viewreport'] = 'view report';
@@ -116,6 +117,7 @@ $string['correcttranslationtitle'] = 'Correct Translation';
 $string['audiochoice'] = 'Audio Choice';
 $string['edit'] = 'Edit';
 $string['gotoactivity'] = 'Start Activity';
+$string['tryactivityagain'] = 'Try Again';
 $string['shuffleanswers'] = 'Shuffle Answers';
 $string['shufflequestions'] = 'Shuffle Questions';
 $string['fluencybuilder:itemview'] = 'View items';
@@ -175,3 +177,11 @@ $string['cancelui_inoquit'] = 'Go back';
 //How was it dialog
 $string['recui_next'] = 'Next';
 $string['recui_howwasit'] = 'How was it?';
+
+//results summary
+$string['summarysessionscore'] = 'Score: {$a}%';
+$string['attemptsummary_header'] = 'Results of latest attempt';
+$string['attemptdetails_header'] = 'Results by item';
+
+
+
