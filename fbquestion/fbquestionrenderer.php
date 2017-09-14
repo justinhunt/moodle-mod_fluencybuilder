@@ -116,7 +116,7 @@ class mod_fluencybuilder_fbquestion_renderer extends plugin_renderer_base {
             $editcell = new html_table_cell($editlink);
 
             $movecell_content='';
-            $spacer = '<img src="' . $this->output->pix_url('spacer') . '" class="iconsmall" alt="" />';
+            $spacer = '<img src="' . $this->output->image_url('spacer') . '" class="iconsmall" alt="" />';
             if ($currentitem > 1) {
                 $upurl = new moodle_url($actionurl, array('id' => $cm->id, 'itemid' => $item->id, 'action' => 'moveup'));
                // $uplink = html_writer::link($upurl,  new pix_icon('t/up', get_string('up'), '', array('class' => 'iconsmall')));
