@@ -120,7 +120,7 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
     public function show_attempt_summary($attempt){
 
         $heading = $this->output->heading(get_string('attemptsummary_header',MOD_FLUENCYBUILDER_LANG),3);
-        $score = \html_writer::div(get_string('summarysessionscore',MOD_FLUENCYBUILDER_LANG,$attempt->sessionscore ),'col-xs-2 col-sm-2 ' . MOD_FLUENCYBUILDER_CLASS  . '_sessionscore');
+        $score = \html_writer::div(get_string('summarysessionscore',MOD_FLUENCYBUILDER_LANG,$attempt->sessionscore ),'col-md-2 col-xs-6 col-sm-6 ' . MOD_FLUENCYBUILDER_CLASS  . '_sessionscore');
         $date = \html_writer::div(date("Y-m-d H:i:s",$attempt->timecreated),'col-xs-2 col-sm-2 ' . MOD_FLUENCYBUILDER_CLASS  . '_sessiondate');
         $summary= \html_writer::div($date . $score,'row ' . MOD_FLUENCYBUILDER_CLASS  . '_attemptsummary');
         return $heading . $summary;
@@ -137,9 +137,9 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
 
         $attempt_summary = $this->show_attempt_summary($latestattempt);
 
-        $rowtemplate = \html_writer::div('@@itemorder@@','col-xs-3 col-sm-3 ' . MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemorder');
-        $rowtemplate .= \html_writer::div('@@itemname@@','col-xs-3 col-sm-3 ' . MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemname');
-        $rowtemplate .= \html_writer::div('@@answer@@', 'col-xs-3 col-sm-3 ' .  MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_answer');
+        $rowtemplate = \html_writer::div('@@itemorder@@','col-md-4 col-xs-4 col-sm-4 ' . MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemorder');
+        $rowtemplate .= \html_writer::div('@@itemname@@','col-md-4 col-xs-4 col-sm-4 ' . MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_itemname');
+        $rowtemplate .= \html_writer::div('@@answer@@', 'col-md-4 col-xs-4 col-sm-4 ' .  MOD_FLUENCYBUILDER_CLASS  . '_reviewrow_answer');
         $rowtemplate = \html_writer::div($rowtemplate,'row ' .  MOD_FLUENCYBUILDER_CLASS  . '_reviewrow');
 
         //initialise rows
@@ -173,7 +173,7 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
     public function containerwrap($content,$center=false){
         $centerclass='';
         if($center){$centerclass =  MOD_FLUENCYBUILDER_CLASS  . '_container_center';}
-        return \html_writer::div($content, 'container-fluid ' .  MOD_FLUENCYBUILDER_CLASS  . '_container ' . $centerclass);
+        return \html_writer::div($content, 'container ' .  MOD_FLUENCYBUILDER_CLASS  . '_container ' . $centerclass);
     }
 
 
@@ -237,7 +237,7 @@ class mod_fluencybuilder_report_renderer extends plugin_renderer_base {
 		$reportbuttons = array();
 		foreach($reports as $report){
 			$button = new single_button(
-				new moodle_url(MOD_FLUENCYBUILDER_URL . '/reports.php',array('report'=>$report,'id'=>$cm->id,'n'=>$moduleinstance->id, 'class'=>MOD_FLUENCYBUILDER_CLASS  . '_listbutton')),
+				new moodle_url(MOD_FLUENCYBUILDER_URL . '/reports.php',array('report'=>$report,'id'=>$cm->id,'n'=>$moduleinstance->id)), 
 				get_string($report .'report',MOD_FLUENCYBUILDER_LANG), 'get');
 			$reportbuttons[] = $this->render($button);
 		}
