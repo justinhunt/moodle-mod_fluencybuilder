@@ -106,9 +106,7 @@ div.mod_fluencybuilder_actionbuttons {
 .mod_fluencybuilder_reviewrow_answer strong{
 	font-size: 20px;
 }
-a.mod_fluencybuilder_startbutton{
-	margin-left: 50px;
-}
+
 .card-block h2{
 	padding: 10px 0px;
 }
@@ -169,9 +167,24 @@ a.mod_fluencybuilder_startbutton{
 	}
 
 }
-
-
+.poodll_mediarecorderholder_fluencybuilder{
+	margin: 0 auto !important;
+	width: 120px;
+}
+.mod_fluencybuilder_itemtext{
+	margin-bottom: 20px;
+}
+.mod_fluencybuilder_cancelholder{
+	margin-top: 20px;
+}
+.mod_fluencybuilder_container_center{
+	
+	text-align: center;
+}
 @media only screen and (max-width : 480px) {
+	#page-mod-fluencybuilder-activity .mod_fluencybuilder_no-close{
+		width: 100% !important;
+	}
 	.mod_fluencybuilder_attemptsummary{
 		width: 100%;
 	}
