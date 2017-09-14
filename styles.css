@@ -72,3 +72,52 @@ div.mod_fluencybuilder_actionbuttons {
 .generaltable.mod_fluencybuilder_session_choosertable  td.buttoncontainer{
 	width: 10%;
 }
+
+
+
+
+
+
+/*
+	Summary Section
+*/
+
+
+
+.mod_fluencybuilder_reviewrow_itemorder strong{
+	font-size: 20px;
+}
+
+.mod_fluencybuilder_reviewrow_itemorder{
+	margin-bottom: 20px;
+}
+
+.mod_fluencybuilder_reviewrow_itemname strong{
+	font-size: 20px;
+}
+
+.mod_fluencybuilder_reviewrow_itemname{
+	margin-bottom: 20px;
+}
+
+.mod_fluencybuilder_reviewrow_answer{
+	margin-bottom: 20px;
+}
+.mod_fluencybuilder_reviewrow_answer strong{
+	font-size: 20px;
+}
+
+
+.card-block a.mod_fluencybuilder_startbutton{
+	margin-left: 50px;
+}
+
+
+
+
+
+
+
+
+
+
