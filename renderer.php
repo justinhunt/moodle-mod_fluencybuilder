@@ -237,7 +237,7 @@ class mod_fluencybuilder_report_renderer extends plugin_renderer_base {
 		$reportbuttons = array();
 		foreach($reports as $report){
 			$button = new single_button(
-				new moodle_url(MOD_FLUENCYBUILDER_URL . '/reports.php',array('report'=>$report,'id'=>$cm->id,'n'=>$moduleinstance->id)), 
+				new moodle_url(MOD_FLUENCYBUILDER_URL . '/reports.php',array('report'=>$report,'id'=>$cm->id,'n'=>$moduleinstance->id, 'class'=>MOD_FLUENCYBUILDER_CLASS  . '_listbutton')),
 				get_string($report .'report',MOD_FLUENCYBUILDER_LANG), 'get');
 			$reportbuttons[] = $this->render($button);
 		}

@@ -224,7 +224,7 @@ class mod_fluencybuilder_basic_report extends  mod_fluencybuilder_base_report {
 class mod_fluencybuilder_allattempts_report extends  mod_fluencybuilder_base_report {
 	
 	protected $report="allattempts";
-	protected $fields = array('id','username','partnername','sessionscore','totaltime','timecreated', 'delete');	
+	protected $fields = array('id','username','sessionscore','timecreated', 'delete');
 	protected $headingdata = null;
 	protected $qcache=array();
 	protected $ucache=array();
@@ -247,14 +247,7 @@ class mod_fluencybuilder_allattempts_report extends  mod_fluencybuilder_base_rep
 						$theuser = $this->fetch_cache('user',$record->userid);
 						$ret=fullname($theuser);
 					break;
-					
-				case 'partnername':
-						$theuser = $this->fetch_cache('user',$record->partnerid);
-						$ret=fullname($theuser);
-					break;
-				case 'totaltime':
-						$ret= $this->fetch_formatted_milliseconds($record->totaltime);
-						break;
+
 						
 				case 'timecreated':
 						$ret = date("Y-m-d H:i:s",$record->timecreated);
@@ -337,14 +330,7 @@ class mod_fluencybuilder_latestattemptsummary_report extends mod_fluencybuilder_
 				}else{
 					$head[]='item:correct';
 				}	
-			}elseif(strpos($field,'item_duration_')===0){
-				$itemid = str_replace('item_duration_','',$field);
-				$fbquestion =$this->fetch_cache('fluencybuilder_fbquestions',$itemid);
-				if($fbquestion){
-					$head[]=$fbquestion->name . ':time' ;
-				}else{
-					$head[]='item:duration';
-				}
+
 			}else{
 				$head[]=get_string($field,MOD_FLUENCYBUILDER_LANG);
 			}
@@ -369,8 +355,6 @@ class mod_fluencybuilder_latestattemptsummary_report extends mod_fluencybuilder_
 				default:
 					//put logic here if need to format item correct or time
 					if(strpos($field,'item_correct_')===0){
-						//do something
-					}elseif(strpos($field,'item_duration_')===0){
 						//do something
 					}
 				
@@ -414,7 +398,6 @@ class mod_fluencybuilder_latestattemptsummary_report extends mod_fluencybuilder_
 		$this->fields = array('username');	
 		foreach($items as $item){
 			$this->fields[]='item_correct_' . $item;
-			$this->fields[]='item_duration_' . $item;
 		}
 		
 		//sometimes we get a userid of 0 ... this is odd
@@ -436,7 +419,6 @@ class mod_fluencybuilder_latestattemptsummary_report extends mod_fluencybuilder_
 				$rawdatarow->fluencybuilder=$moduleinstance->id;
 				foreach($items as $item){
 					$rawdatarow->{'item_correct_' . $item}='-';
-					$rawdatarow->{'item_duration_' . $item}='-';
 				}
 			}
 			//stash the slide pair data
@@ -467,7 +449,7 @@ class mod_fluencybuilder_latestattemptsummary_report extends mod_fluencybuilder_
 class mod_fluencybuilder_oneattempt_report extends  mod_fluencybuilder_base_report {
 	
 	protected $report="oneattempt";
-	protected $fields = array('id','fbquestionname','answer','correct','points','totaltime','timecreated');	
+	protected $fields = array('id','fbquestionname','correct','timecreated');
 	protected $headingdata = null;
 	protected $qcache=array();
 	protected $ucache=array();
@@ -494,14 +476,7 @@ class mod_fluencybuilder_oneattempt_report extends  mod_fluencybuilder_base_repo
 				case 'correct':
 						$ret=$record->correct ? get_string('yes') : get_string('no');
 					break;
-				
-				case 'answer':
-						$ret=$record->answerid;
-					break;
-				
-				case 'totaltime':
-						$ret= $this->fetch_formatted_milliseconds($record->duration);
-						break;
+
 						
 				case 'timecreated':
 						$ret = date("Y-m-d H:i:s",$record->timecreated);
@@ -551,7 +526,7 @@ class mod_fluencybuilder_oneattempt_report extends  mod_fluencybuilder_base_repo
 class mod_fluencybuilder_allfbquestions_report extends  mod_fluencybuilder_base_report {
 	
 	protected $report="allfbquestions";
-	protected $fields = array('id','fbquestionname','count','avgcorrect','avgtotaltime');	
+	protected $fields = array('id','fbquestionname','count','avgcorrect');
 	protected $headingdata = null;
 	protected $qcache=array();
 	protected $ucache=array();
@@ -583,10 +558,7 @@ class mod_fluencybuilder_allfbquestions_report extends  mod_fluencybuilder_base_
 				case 'avgcorrect':
 						$ret= round($record->avgcorrect,2);
 						break;				
-					
-				case 'avgtotaltime':
-						$ret= $this->fetch_formatted_milliseconds(round($record->avgtotaltime));
-						break;
+
 
 				default:
 					if(property_exists($record,$field)){

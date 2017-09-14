@@ -48,14 +48,14 @@ $string['fluencybuilder:view'] = 'View fluencybuilder';
 $string['id']='ID';
 $string['name']='Name';
 $string['timecreated']='Time Created';
-$string['basicheading']='Basic Report';
+$string['basicheading']='Fluencybuilder Activities Report';
 $string['overview']='Overview';
 $string['overview_help']='Overview Help';
 $string['view']='View';
 $string['preview']='Preview';
 $string['viewreports']='View Reports';
 $string['reports']='Reports';
-$string['basicreport']='Basic Report';
+$string['basicreport']='Fluencybuilder Activities Report';
 $string['returntoreports']='Return to Reports';
 $string['exportexcel']='Export to CSV';
 $string['mingradedetails'] = 'The minimum grade required to "complete" this activity.';
@@ -71,8 +71,8 @@ $string['gradelatest'] ='score of latest attempt';
 $string['gradeaverage'] ='average score of all attempts';
 $string['defaultsettings'] ='Default Settings';
 $string['exceededattempts'] ='You have completed the maximum {$a} attempts.';
-$string['fbquestions'] ='FBQuestions';
-$string['managefbquestions'] ='Manage FBQuestions';
+$string['fbquestions'] ='Items';
+$string['managefbquestions'] ='Manage Items';
 //fbquestions
 
 $string['whatdonow'] = 'What would you like to do?';
@@ -132,15 +132,15 @@ $string['allattemptsreport'] = 'All Attempts Report';
 $string['allattemptsheading'] = 'All Attempts Report';
 $string['oneattemptreport'] = 'One Attempt Report';
 $string['oneattemptheading'] = 'One Attempt Report';
-$string['allfbquestionsreport'] = 'All FBQuestions Report';
-$string['allfbquestionsheading'] = 'All FBQuestions Report';
-$string['onefbquestionreport'] = 'One FBQuestion Report';
-$string['onefbquestionheading'] = 'One FBQuestion Report';
+$string['allfbquestionsreport'] = 'All Items Report';
+$string['allfbquestionsheading'] = 'All Items Report';
+$string['onefbquestionreport'] = 'One Item Report';
+$string['onefbquestionheading'] = 'One Item Report';
 $string['username'] = 'User';
 $string['partnername'] = 'Partner';
 $string['sessionscore'] = 'Score(%)';
 $string['totaltime'] = 'Total Time';
-$string['fbquestionname'] = 'FBQuestion';
+$string['fbquestionname'] = 'Item';
 $string['correct'] = 'Correct';
 $string['avgcorrect'] = 'Av. Correct';
 $string['avgtotaltime'] = 'Av. Duration';
@@ -154,7 +154,7 @@ $string['boundarygrade']='{$a}: points ';
 $string['numeric']='Must be numeric ';
 $string['latestattemptsummary']= 'Latest Attempt Summary: {$a}';
 $string['latestattemptsummaryreport']= 'Latest Attempt Summary';
-$string['iteminuse']= 'This fbquestion is part of users attempt history. It cannot be deleted.';
+$string['iteminuse']= 'This item is part of users attempt history. It cannot be deleted.';
 $string['moveitemup']='Up';
 $string['moveitemdown']='Down';
 
@@ -183,6 +183,8 @@ $string['recui_howwasit'] = 'How was it?';
 $string['summarysessionscore'] = 'Score: {$a}%';
 $string['attemptsummary_header'] = 'Results of latest attempt';
 $string['attemptdetails_header'] = 'Results by item';
+
+$string['count'] = 'Count';
 
 
 
