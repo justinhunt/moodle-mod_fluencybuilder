@@ -31,7 +31,6 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             thecontrols +=  M.util.get_string('cancelui_reallycancel', 'mod_fluencybuilder') ;
             thecontrols += '</div>';//end of dialog div
             thecontrols += '</div>';//end of hide div
-            thecontrols +=  '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_cancelbutton">' + M.util.get_string('cancelui_cancelactivity', 'mod_fluencybuilder')  + '</button>';
             $(element).prepend(thecontrols);
 
             var controls ={
