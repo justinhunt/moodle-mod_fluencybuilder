@@ -100,11 +100,11 @@ if($moduleinstance->maxattempts > 0){
 	}
 }
 
-
-echo $renderer->show_items($cm,$moduleinstance);
-echo $renderer->fetch_start_button();
-
-
+$content = '';
+$content .= $renderer->show_items($cm,$moduleinstance);
+$content .= $renderer->fetch_start_button();
+$content .= $renderer->fetch_cancel_button($cm);
+echo $renderer->containerwrap($content,true);
 
 // Finish the page
 echo $renderer->footer();

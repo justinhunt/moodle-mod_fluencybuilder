@@ -103,12 +103,6 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
             $this->page->requires->js_call_amd("mod_fluencybuilder/postrecorddialog", 'init', array($opts));
         }
 
-        //cancel button
-        $cancelid= \html_writer::random_id(MOD_FLUENCYBUILDER_CLASS . '_cancelholder_') ;
-        $ret.=  \html_writer::tag('div','', array('id' => $cancelid, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_cancelholder'));
-        $opts=array('holderid' => $cancelid,'cmid'=>$cm->id);
-        $this->page->requires->js_call_amd("mod_fluencybuilder/canceldialog", 'init', array($opts));
-
         //strings for JS
         $this->page->requires->strings_for_js(array(
             'cancelui_cancelactivity',
@@ -175,9 +169,13 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
         return $attempt_summary . $attemptdetails . $rows;
     }
 
-    public function containerwrap($content){
-        return \html_writer::div($content, 'container-fluid ' .  MOD_FLUENCYBUILDER_CLASS  . '_container');
+
+    public function containerwrap($content,$center=false){
+        $centerclass='';
+        if($center){$centerclass =  MOD_FLUENCYBUILDER_CLASS  . '_container_center';}
+        return \html_writer::div($content, 'container-fluid ' .  MOD_FLUENCYBUILDER_CLASS  . '_container ' . $centerclass);
     }
+
 
 	/**
      * Return HTML to display limited header
@@ -191,10 +189,21 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
 		global $CFG;
 		$urlparams = array('n'=>$fluencybuilder->id,);
         $link = new moodle_url($CFG->wwwroot . '/mod/fluencybuilder/activity.php',$urlparams);
-        $ret =  html_writer::link($link, $caption,array('class'=>'btn btn-primary ' . MOD_FLUENCYBUILDER_CLASS  . '_startbutton'));
+        $ret =  html_writer::link($link, $caption,array('class'=>'btn btn-primary ' . MOD_FLUENCYBUILDER_CLASS  . '_newsessionbutton'));
         return $ret;
 
     }
+
+    public function fetch_cancel_button($cm){
+        //cancel button
+        $cancelid= \html_writer::random_id(MOD_FLUENCYBUILDER_CLASS . '_cancelholder_') ;
+        $opts=array('holderid' => $cancelid,'cmid'=>$cm->id);
+        $this->page->requires->js_call_amd("mod_fluencybuilder/canceldialog", 'init', array($opts));
+        $cancelbutton =  html_writer::link('#', get_string('cancelui_cancelactivity',MOD_FLUENCYBUILDER_LANG),array('class'=>MOD_FLUENCYBUILDER_CLASS  . '_dbutton ' . MOD_FLUENCYBUILDER_CLASS  . '_cancelbutton'));
+        $ret =  \html_writer::tag('div',$cancelbutton, array('id' => $cancelid, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_cancelholder'));
+        return $ret;
+      }
+
 
     public function fetch_start_button() {
         $buttonid = MOD_FLUENCYBUILDER_CLASS  . '_startbutton';
