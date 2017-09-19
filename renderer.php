@@ -95,10 +95,11 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
             $modelurl = $fluencytest->fetch_media_url(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, $item);
             $recorder = $fluencytest->prepare_recorder_tool($resourceurl, $modelurl, $item);
             $itemprogress =  \html_writer::tag('h3',$currentitem . '/' . $itemcount, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemprogress'));
-            $itemtext =  \html_writer::tag('div',$fluencybuilder->questionheader, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
+            $itemheader =  \html_writer::tag('div',$fluencybuilder->questionheader, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
+            $itemtext =  \html_writer::tag('div',$item->{MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION}, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
 
             //post record dialog
-            $ret.=  \html_writer::tag('div',$itemprogress . $itemtext . $recorder, array('id' => 'mod_fluencybuilder_dplaceholder_' . $currentitem, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_itemholder ' . $showorhide));
+            $ret.=  \html_writer::tag('div',$itemprogress . $itemheader . $itemtext . $recorder, array('id' => 'mod_fluencybuilder_dplaceholder_' . $currentitem, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_itemholder ' . $showorhide));
             $opts=array('itemid' => $item->id, 'currentitem'=>$currentitem,'itemcount'=>$itemcount,'cmid'=>$cm->id);
             $this->page->requires->js_call_amd("mod_fluencybuilder/postrecorddialog", 'init', array($opts));
         }
