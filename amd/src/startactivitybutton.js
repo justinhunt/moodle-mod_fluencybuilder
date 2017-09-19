@@ -32,9 +32,9 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             var resource_play_button= $('#' + 'mod_fluencybuilder_dplaceholder_1 .poodll_play-resource_fluencybuilder');
 
             startbutton.click(function (e) {
-                e.preventDefault()
-                firstplayercontainer.show();
+                e.preventDefault();
                 resource_play_button.click();
+                firstplayercontainer.show();
                 startbutton.hide();
             });
 

@@ -121,8 +121,8 @@ class mod_fluencybuilder_renderer extends plugin_renderer_base {
     public function show_attempt_summary($attempt){
 
         $heading = $this->output->heading(get_string('attemptsummary_header',MOD_FLUENCYBUILDER_LANG),3);
-        $score = \html_writer::div(get_string('summarysessionscore',MOD_FLUENCYBUILDER_LANG,$attempt->sessionscore ),'col-md-2 col-xs-6 col-sm-6 ' . MOD_FLUENCYBUILDER_CLASS  . '_sessionscore');
-        $date = \html_writer::div(date("Y-m-d H:i:s",$attempt->timecreated),'col-xs-2 col-sm-2 ' . MOD_FLUENCYBUILDER_CLASS  . '_sessiondate');
+        $score = \html_writer::div(get_string('summarysessionscore',MOD_FLUENCYBUILDER_LANG,$attempt->sessionscore ),'col-md-4 col-xs-12 col-sm-6 ' . MOD_FLUENCYBUILDER_CLASS  . '_sessionscore');
+        $date = \html_writer::div(date("Y-m-d H:i:s",$attempt->timecreated),'col-md-5 col-xs-12 col-sm-6  ' . MOD_FLUENCYBUILDER_CLASS  . '_sessiondate');
         $summary= \html_writer::div($date . $score,'row ' . MOD_FLUENCYBUILDER_CLASS  . '_attemptsummary');
         return $heading . $summary;
     }

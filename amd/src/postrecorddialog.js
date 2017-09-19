@@ -64,6 +64,7 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
         register_events: function() {
             var ip = this.instanceprops;
             var that = this;
+            var recorder_play_button = $('#' + ip.holderid + '  .poodll_play-recording_fluencybuilder');
 
             ip.controls.me_ok.click(function () {
                 that.send_evaluation('ok');
@@ -75,7 +76,6 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
 
             //set the submission player src to the origin
             ip.controls.me_play.click(function () {
-                var recorder_play_button = $('#' + ip.holderid + '  .poodll_play-recording_fluencybuilder');
                 recorder_play_button.click();
             });
 

@@ -129,43 +129,13 @@ div.mod_fluencybuilder_actionbuttons {
     text-align: center;
     border: 1px solid;
     border-right: 0px;
-	padding: 10px;
+	padding: 10px 0px !important;
 }
 
 .mod_fluencybuilder_sessionscore{
 	text-align: center;
     border: 1px solid;
-	padding: 10px;
-}
-
-@media only screen and (max-width : 1200px) {
-	.mod_fluencybuilder_sessiondate{
-		width: 50% !important;
-	}
-	.mod_fluencybuilder_sessionscore{
-		width: 50% !important;
-	}
-}
-
-@media only screen and (max-width : 992px) {
-	.mod_fluencybuilder_sessiondate{
-		width: 50% !important;
-	}
-	.mod_fluencybuilder_sessionscore{
-		width: 50% !important;
-	}
-}
-
-@media only screen and (max-width : 768px) {
-
-
-	.mod_fluencybuilder_sessiondate{
-		width: 50% !important;
-	}
-	.mod_fluencybuilder_sessionscore{
-		width: 50% !important;
-	}
-
+	padding: 10px 0px !important;
 }
 .poodll_mediarecorderholder_fluencybuilder{
 	margin: 0 auto !important;
@@ -181,23 +151,18 @@ div.mod_fluencybuilder_actionbuttons {
 	
 	text-align: center;
 }
-@media only screen and (max-width : 480px) {
+@media only screen and (max-width : 768px) {
 	#page-mod-fluencybuilder-activity .mod_fluencybuilder_no-close{
 		width: 100% !important;
 	}
 	.mod_fluencybuilder_attemptsummary{
 		width: 100%;
 	}
-	.mod_fluencybuilder_sessiondate{
-		width: 50% !important;
-		padding: 0px;
-	}
-	.mod_fluencybuilder_sessionscore{
-		width: 50% !important;
-		height: 44px;
-	}
 	.mod_fluencybuilder_reviewrow{
 		width: 100% !important;
+	}
+	.mod_fluencybuilder_sessiondate{
+		border: 1px solid #333;
 	}
 }
 
