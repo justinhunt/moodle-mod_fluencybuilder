@@ -113,10 +113,8 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
 		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT_FILEAREA, 'id');
 		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, 'id');
         $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, 'id');
-		for($i=1;$i<=MOD_FLUENCYBUILDER_FBQUESTION_MAXANSWERS;$i++){
-			$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER_FILEAREA.$i, 'id');
-			$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER_FILEAREA.$i, 'id');
-		}
+        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER_FILEAREA, 'id');
+        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER_FILEAREA, 'id');
 
         // Return the root element (choice), wrapped into standard activity structure.
         return $this->prepare_activity_structure($oneactivity);
