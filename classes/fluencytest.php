@@ -77,7 +77,7 @@ class fluencytest
             $attempt = $this->fetch_latest_attempt($userid);
             $attemptid = $attempt->id;
         }
-        $attemptitems = $DB->get_records_menu(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE, array('fluencybuilderid' => $this->mod->id,'userid'=>$userid,'attemptid'=>$attemptid),'itemid ASC', 'itemid,correct');
+        $attemptitems = $DB->get_records_menu(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE, array('fluencybuilderid' => $this->mod->id,'userid'=>$userid,'attemptid'=>$attemptid),'timecreated ASC', 'itemid,correct');
         if($attemptitems){
             return $attemptitems;
         }else{

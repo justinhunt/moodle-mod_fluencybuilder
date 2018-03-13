@@ -58,8 +58,8 @@ $string['reports']='Reports';
 $string['basicreport']='Fluencybuilder Activities Report';
 $string['returntoreports']='Return to Reports';
 $string['exportexcel']='Export to CSV';
-$string['mingradedetails'] = 'The minimum grade required to "complete" this activity.';
-$string['mingrade'] = 'Minimum Grade';
+$string['completeonfinishdetails'] = 'Set this activity complete when the user has answered all items in the activity.';
+$string['completeonfinish'] = 'Complete on finish';
 $string['deletealluserdata'] = 'Delete all user data';
 $string['maxattempts'] ='Max. Attempts';
 $string['unlimited'] ='unlimited';
@@ -80,6 +80,7 @@ $string['addnewitem'] = 'Add a New item';
 $string['addingitem'] = 'Adding a New item';
 $string['editingitem'] = 'Editing a item';
 $string['createaitem'] = 'Create a item';
+$string['item'] = 'Item';
 $string['itemtitle'] = 'Item Title';
 $string['itemcontents'] = 'Item Description';
 $string['answer'] = 'Answer';
@@ -183,7 +184,7 @@ $string['recui_howwasit'] = 'How was it?';
 $string['summarysessionscore'] = 'Score: {$a}%';
 $string['attemptsummary_header'] = 'Results of latest attempt';
 $string['attemptdetails_header'] = 'Results by item';
-
+$string['notattempted_header'] = 'Not attempted items';
 $string['count'] = 'Count';
 
 

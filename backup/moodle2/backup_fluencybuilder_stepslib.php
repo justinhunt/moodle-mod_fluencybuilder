@@ -51,7 +51,7 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
 
         // root element describing fluencybuilder instance
         $oneactivity = new backup_nested_element(MOD_FLUENCYBUILDER_MODNAME, array('id'), array(
-            'course','name','intro','introformat','questionheader','timetarget','grade','gradeoptions','maxattempts','mingrade',
+            'course','name','intro','introformat','questionheader','timetarget','grade','gradeoptions','maxattempts','completeonfinish',
 			'timecreated','timemodified'
 			));
 			
@@ -87,7 +87,7 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
 
         // Define sources.
         $oneactivity->set_source_table(MOD_FLUENCYBUILDER_TABLE, array('id' => backup::VAR_ACTIVITYID));
-		$fbquestion->set_source_table(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,
+		$fbquestion->set_source_table(\mod_fluencybuilder\fbquestion\constants::TABLE,
                                         array(MOD_FLUENCYBUILDER_MODNAME => backup::VAR_PARENTID));
 
 
@@ -109,12 +109,12 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
         $oneactivity->annotate_files(MOD_FLUENCYBUILDER_FRANKY, 'intro', null);
 		
 		//other file areas use fluencybuilderid
-		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION_FILEAREA, 'id');
-		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT_FILEAREA, 'id');
-		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, 'id');
-        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, 'id');
-        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER_FILEAREA, 'id');
-        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER_FILEAREA, 'id');
+		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::EXTQUESTION_FILEAREA, 'id');
+		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::PICTUREPROMPT_FILEAREA, 'id');
+		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOPROMPT_FILEAREA, 'id');
+        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOMODEL_FILEAREA, 'id');
+        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::TEXTANSWER_FILEAREA, 'id');
+        $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOANSWER_FILEAREA, 'id');
 
         // Return the root element (choice), wrapped into standard activity structure.
         return $this->prepare_activity_structure($oneactivity);

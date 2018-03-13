@@ -56,8 +56,8 @@ class restore_fluencybuilder_activity_task extends restore_activity_task {
         $contents[] = new restore_decode_content(MOD_FLUENCYBUILDER_MODNAME,
                           array('intro'), MOD_FLUENCYBUILDER_MODNAME);
 
-        $contents[] = new restore_decode_content(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,
-                          array('itemtext','customtext1','customtext2','customtext3','customtext4'), MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
+        $contents[] = new restore_decode_content(\mod_fluencybuilder\fbquestion\constants::TABLE,
+                          array('itemtext','customtext1','customtext2','customtext3','customtext4'), \mod_fluencybuilder\fbquestion\constants::TABLE);
 
         return $contents;
     }

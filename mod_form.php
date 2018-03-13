@@ -115,4 +115,33 @@ class mod_fluencybuilder_mod_form extends moodleform_mod
         // add standard buttons, common to all modules
         $this->add_action_buttons();
     }
+
+    /**
+     * Add elements for setting the custom completion rules.
+     *
+     * @category completion
+     * @return array List of added element names, or names of wrapping group elements.
+     */
+    public function add_completion_rules() {
+
+        $mform =& $this->_form;
+        $mform->addElement('checkbox', 'completeonfinish',
+            get_string('completeonfinish', MOD_FLUENCYBUILDER_LANG));
+        $mform->setDefault('completeonfinish',true);
+        $mform->setType('completeonfinish', PARAM_BOOL);
+
+
+
+        return array('completeonfinish');
+    }
+
+    /**
+     * Called during validation to see whether some module-specific completion rules are selected.
+     *
+     * @param array $data Input data not yet validated.
+     * @return bool True if one or more rules is enabled, false if none are.
+     */
+    public function completion_rule_enabled($data) {
+        return !empty($data['completeonfinish']);
+    }
 }

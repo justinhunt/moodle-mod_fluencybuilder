@@ -1,4 +1,7 @@
 <?php
+
+namespace mod_fluencybuilder\fbquestion;
+
 ///////////////////////////////////////////////////////////////////////////
 //                                                                       //
 // This file is part of Moodle - http://moodle.org/                      //
@@ -28,9 +31,8 @@
  * @copyright  (C) 1999 onwards Justin Hunt  http://poodll.com
  */
 
+//why do we need to include this?
 require_once($CFG->libdir . '/formslib.php');
-//require_once($CFG->dirroot . '/course/lib.php');
-require_once($CFG->dirroot . '/mod/fluencybuilder/lib.php');
 
 /**
  * Abstract class that item type's inherit from.
@@ -41,7 +43,7 @@ require_once($CFG->dirroot . '/mod/fluencybuilder/lib.php');
  * @copyright  2014 Justin Hunt
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class fluencybuilder_add_item_form_base extends moodleform {
+abstract class baseform extends \moodleform {
 
     /**
      * This is used to identify this itemtype.
@@ -128,9 +130,11 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
             $mform->setType('name', PARAM_TEXT);
             $mform->addRule('name', get_string('required'), 'required', null, 'client');
 
-            $mform->addElement('editor', MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION . '_editor', get_string('itemcontents', 'fluencybuilder'), array('rows'=>'4', 'columns'=>'80'), $this->editoroptions);
-            $mform->setType(MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION . '_editor', PARAM_RAW);
-            $mform->addRule(MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION . '_editor', get_string('required'), 'required', null, 'client');
+            $mform->addElement('editor', constants::TEXTQUESTION . '_editor', get_string('itemcontents', 'fluencybuilder'), array('rows'=>'4', 'columns'=>'80'), $this->editoroptions);
+            $mform->setType(constants::TEXTQUESTION . '_editor', PARAM_RAW);
+
+            //it was decided that this did not need to be a required field JUSTIN 20180312
+            //$mform->addRule(constants::TEXTQUESTION . '_editor', get_string('required'), 'required', null, 'client');
         }
 		//visibility
 		$mform->addElement('selectyesno', 'visible', get_string('visible'));
@@ -164,11 +168,11 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
 	}
 
 	protected final function add_audio_prompt_upload($label = null, $required = false) {
-		return $this->add_audio_upload(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT,-1,$label,$required);
+		return $this->add_audio_upload(constants::AUDIOPROMPT,-1,$label,$required);
 	}
 
     protected final function add_audio_model_upload($label = null, $required = false) {
-        return $this->add_audio_upload(MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL,-1,$label,$required);
+        return $this->add_audio_upload(constants::AUDIOMODEL,-1,$label,$required);
     }
 
 	protected final function add_picture_upload($name, $count=-1, $label = null, $required = false) {
@@ -186,7 +190,7 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
 	}
 
 	protected final function add_picture_item_upload($label = null, $required = false) {
-		return $this->add_picture_upload(MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT,-1,$label,$required);
+		return $this->add_picture_upload(constants::PICTUREPROMPT,-1,$label,$required);
 	}
 
 
@@ -219,47 +223,5 @@ abstract class fluencybuilder_add_item_form_base extends moodleform {
      */
     public function construction_override($itemid,  $fluencybuilder) {
         return true;
-    }
-}
-
-//this is the standard form for creating an item with a text only prompt
-class fluencybuilder_add_item_form_textprompt extends fluencybuilder_add_item_form_base {
-
-    public $type = 'textchoice';
-    public $typestring = 'textchoice';
-
-    public function custom_definition() {
-
-		
-		$this->add_audio_prompt_upload(get_string('audioitemfile','fluencybuilder'));
-		
-    }
-}
-
-
-//this is the standard form for creating an item with an audio only prompt
-class fluencybuilder_add_item_form_audioprompt extends fluencybuilder_add_item_form_base {
-
-    public $type = 'audiochoice';
-    public $typestring = 'audiochoice';
-
-    public function custom_definition() {
-	
-		$this->add_audio_prompt_upload(get_string('addaudiopromptfile','fluencybuilder'));
-
-        $this->add_audio_model_upload(get_string('addaudiomodelfile','fluencybuilder'));
-    }
-}
-
-//this is the standard form for creating an item with a picture prompt
-class fluencybuilder_add_item_form_pictureprompt extends fluencybuilder_add_item_form_base {
-
-    public $type = 'picturechoice';
-    public $typestring = 'picturechoice';
-
-    public function custom_definition() {
-	
-		$this->add_picture_item_upload(get_string('pictureitemfile','fluencybuilder'));
-
     }
 }

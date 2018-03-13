@@ -48,7 +48,7 @@ class restore_fluencybuilder_activity_structure_step extends restore_activity_st
         $paths[] = $oneactivity;
 		
 		//fbquestions
-		$fbquestions = new restore_path_element(MOD_FLUENCYBUILDER_FBQUESTION_TABLE,
+		$fbquestions = new restore_path_element(\mod_fluencybuilder\fbquestion\constants::TABLE,
                                             '/activity/fluencybuilder/fbquestions/fbquestion');
 		$paths[] = $fbquestions;
 
@@ -104,8 +104,8 @@ class restore_fluencybuilder_activity_structure_step extends restore_activity_st
 
 		
         $data->{MOD_FLUENCYBUILDER_MODNAME} = $this->get_new_parentid(MOD_FLUENCYBUILDER_MODNAME);
-        $newfbquestionid = $DB->insert_record(MOD_FLUENCYBUILDER_FBQUESTION_TABLE, $data);
-       $this->set_mapping(MOD_FLUENCYBUILDER_FBQUESTION_TABLE, $oldid, $newfbquestionid, true); // Mapping with files
+        $newfbquestionid = $DB->insert_record(\mod_fluencybuilder\fbquestion\constants::TABLE, $data);
+       $this->set_mapping(\mod_fluencybuilder\fbquestion\constants::TABLE, $oldid, $newfbquestionid, true); // Mapping with files
   }
 
 	//note these function names are set above in the restore path element
@@ -146,13 +146,13 @@ class restore_fluencybuilder_activity_structure_step extends restore_activity_st
         $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, 'intro', null);
 
 		//do question areas
-		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_TEXTQUESTION_FILEAREA, MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
-		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOPROMPT_FILEAREA, MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
-        $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOMODEL_FILEAREA, MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
-		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_PICTUREPROMPT_FILEAREA, MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
+		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::TEXTQUESTION_FILEAREA, \mod_fluencybuilder\fbquestion\constants::ABLE);
+		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOPROMPT_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
+        $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOMODEL_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
+		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::PICTUREPROMPT_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
 
 		//do answer areas
-        $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_TEXTANSWER_FILEAREA, MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
-        $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, MOD_FLUENCYBUILDER_FBQUESTION_AUDIOANSWER_FILEAREA, MOD_FLUENCYBUILDER_FBQUESTION_TABLE);
+        $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::TEXTANSWER_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
+        $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOANSWER_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
     }
 }

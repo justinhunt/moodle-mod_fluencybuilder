@@ -27,8 +27,6 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
-require_once(dirname(__FILE__).'/fbquestion/fbquestionlib.php');
-require_once(dirname(__FILE__).'/reportclasses.php');
 
 
 $id = optional_param('id', 0, PARAM_INT); // course_module ID, or
@@ -114,34 +112,34 @@ switch ($showreport){
 		return;
 
 	case 'basic':
-		$report = new mod_fluencybuilder_basic_report();
+		$report = new \mod_fluencybuilder\report\basic();
 		$formdata = new stdClass();
 		break;
 	
 	case 'allattempts':
-		$report = new mod_fluencybuilder_allattempts_report();
+		$report = new \mod_fluencybuilder\report\allattempts();
 		$formdata = new stdClass();
 		$formdata->cmid=$cm->id;
 		break;
 		
 	case 'latestattemptsummary':
-		$report = new mod_fluencybuilder_latestattemptsummary_report();
+		$report = new \mod_fluencybuilder\report\latestattemptsummary();
 		$formdata = new stdClass();
 		break;
 		
 	case 'oneattempt':
-		$report = new mod_fluencybuilder_oneattempt_report();
+		$report = new \mod_fluencybuilder\report\oneattempt();
 		$formdata = new stdClass();
 		$formdata->attemptid=$itemid;
 		break;
 		
 	case 'allfbquestions':
-		$report = new mod_fluencybuilder_allfbquestions_report();
+		$report = new \mod_fluencybuilder\report\allfbquestions();
 		$formdata = new stdClass();
 		break;
 		
 	case 'onefbquestion':
-		$report = new mod_fluencybuilder_onefbquestion_report();
+		$report = new \mod_fluencybuilder\report\onefbquestion();
 		$formdata = new stdClass();
 		$formdata->fbquestionitemid=$itemid;
 		break;

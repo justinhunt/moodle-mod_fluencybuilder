@@ -39,8 +39,6 @@ define('MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE','fluencybuilder_attemptitem');
 define('MOD_FLUENCYBUILDER_MODNAME','fluencybuilder');
 define('MOD_FLUENCYBUILDER_URL','/mod/fluencybuilder');
 define('MOD_FLUENCYBUILDER_CLASS','mod_fluencybuilder');
-define('MOD_FLUENCYBUILDER_PARTNERMODEMANUAL',0);
-define('MOD_FLUENCYBUILDER_PARTNERMODEAUTO',1);
 
 
 /* FB_GRADING */
@@ -55,13 +53,6 @@ define('MOD_FLUENCYBUILDER_GRADENONE', 4);
 define('MOD_FLUENCYBUILDER_TIMETARGET_IGNORE', 0);
 define('MOD_FLUENCYBUILDER_TIMETARGET_SHOW', 1);
 define('MOD_FLUENCYBUILDER_TIMETARGET_FORCE', 2);
-
-//These are for the MODE (unused)
-define('MOD_FLUENCYBUILDER_MODETEACHERSTUDENT', 0);
-define('MOD_FLUENCYBUILDER_MODESTUDENTSTUDENT', 1);
-
-
-require_once($CFG->dirroot.'/mod/fluencybuilder/fbquestion/fbquestionlib.php');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Moodle core API                                                            //
@@ -374,24 +365,19 @@ function fluencybuilder_is_complete($course,$cm,$userid,$type) {
     if(!($moduleinstance=$DB->get_record(MOD_FLUENCYBUILDER_TABLE,array('id'=>$cm->instance)))) {
         throw new Exception("Can't find module with cmid: {$cm->instance}");
     }
-	$idfield = 'a.' . MOD_FLUENCYBUILDER_MODNAME . 'id';
-	$params = array('moduleid'=>$moduleinstance->id, 'userid'=>$userid);
-	$sql = "SELECT  MAX( sessionscore  ) AS grade
-                      FROM {". MOD_FLUENCYBUILDER_ATTEMPTTABLE ."}
-                     WHERE userid = :userid AND " . MOD_FLUENCYBUILDER_MODNAME . "id = :moduleid";
-	$result = $DB->get_field_sql($sql, $params);
-	if($result===false){return false;}
-	 
-	//check completion reqs against satisfied conditions
-	switch ($type){
-		case COMPLETION_AND:
-			$success = $result >= $moduleinstance->mingrade;
-			break;
-		case COMPLETION_OR:
-			$success = $result >= $moduleinstance->mingrade;
-	}
-	//return our success flag
-	return $success;
+
+    //return $type if our options are not enabled
+    if(!$moduleinstance->completeonfinish){return $type;}
+
+    //check for completion
+    $finished = false;
+	$item_ids = $DB->get_fieldset_select(\mod_fluencybuilder\fbquestion\constants::TABLE,'id','fluencybuilder=:fluencybuilderid',array('fluencybuilderid'=>$moduleinstance->id));
+    $attempt_itemcount = $DB->get_fieldset_sql('SELECT count(itemid)  FROM {fluencybuilder_attemptitem} WHERE userid=:userid AND fluencybuilderid=:fluencybuilderid GROUP BY attemptid', array('userid'=>$userid,'fluencybuilderid'=>$moduleinstance->id));
+
+	if($item_ids && $attempt_itemcount){
+	    $finished = max($attempt_itemcount)>=count($item_ids);
+    }
+    return $finished;
 }
 
 

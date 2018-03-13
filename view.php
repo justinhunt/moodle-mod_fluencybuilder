@@ -83,24 +83,6 @@ $PAGE->set_pagelayout('course');
 
 
 
-//get our javascript all ready to go
-//We can omit $jsmodule, but its nice to have it here, 
-//if for example we need to include some funky YUI stuff
-$jsmodule = array(
-	'name'     => 'mod_fluencybuilder',
-	'fullpath' => '/mod/fluencybuilder/module.js',
-	'requires' => array()
-);
-//here we set up any info we need to pass into javascript
-$opts =Array();
-
-//this inits the M.mod_fluencybuilder thingy, after the page has loaded.
-$PAGE->requires->js_init_call('M.mod_fluencybuilder.helper.init', array($opts),false,$jsmodule);
-
-//this loads any external JS libraries we need to call
-//$PAGE->requires->js("/mod/fluencybuilder/js/somejs.js");
-//$PAGE->requires->js(new moodle_url('http://www.somewhere.com/some.js'),true);
-
 //This puts all our display logic into the renderer.php file in this plugin
 $renderer = $PAGE->get_renderer('mod_fluencybuilder');
 

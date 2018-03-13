@@ -45,21 +45,21 @@ function xmldb_fluencybuilder_upgrade($oldversion) {
 
     $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 
-   /*
-	if($oldversion < 2016092104){
+
+	if($oldversion < 2018031201){
 	
-	// Get moodle cst table
-        $table = new xmldb_table('fluencybuilder_attemptitem');
-		
-		//add grade field
-		$field = new xmldb_field('points', 
-			XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
+	    // Get fluencybuilder table and mingrade field
+        $table = new xmldb_table('fluencybuilder');
+        $field = new xmldb_field('mingrade',XMLDB_TYPE_INTEGER, '1', null,XMLDB_NOTNULL, null, 1);
+        // Conditionally rename field mingrade to completeonfinish.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->change_field_precision($table,$field);
+            $dbman->change_field_default($table,$field);
+            $dbman->rename_field($table,$field,'completeonfinish');
         }
-	
-		upgrade_mod_savepoint(true, 2016092104, 'fluencybuilder');	
+
+		upgrade_mod_savepoint(true, 2018031201, 'fluencybuilder');
 	}
-	*/
+
     return true;
 }
