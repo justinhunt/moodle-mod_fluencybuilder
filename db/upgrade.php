@@ -32,7 +32,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/fluencybuilder/fbquestion/fbquestionlib.php');
 
 /**
  * Execute fluencybuilder upgrade from the given old version
