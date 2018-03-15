@@ -64,6 +64,11 @@ class renderer extends \plugin_renderer_base {
         $caption =  get_string('gotoactivity',MOD_FLUENCYBUILDER_LANG);
         $button =  \html_writer::link('#', $caption,array('id'=>$buttonid,'class'=>'btn btn-primary ' . MOD_FLUENCYBUILDER_CLASS  . '_startbutton ' . MOD_FLUENCYBUILDER_CLASS  . '_startbutton_disabled'));
 
+        //the sorry-we do-not-support you box
+        $sorryboxid = $widgetid . '_sorrybox';
+        $sorrytext =  get_string('sorryunsupported',MOD_FLUENCYBUILDER_LANG);
+        $sorrybox =  \html_writer::tag('div',$sorrytext, array('id'=>$sorryboxid,'class' => MOD_FLUENCYBUILDER_CLASS  . '_sorrybox hide'));
+
         //the recorder div
         $recorderid = $widgetid . '_recorder';
         $recorder =  \html_writer::tag('div','', array('id' => $recorderid));
@@ -89,8 +94,8 @@ class renderer extends \plugin_renderer_base {
         $holderid= $widgetid . '_holder';
         $ret =  \html_writer::tag('div',$itemprogress . $itemheader . $itemtext . $recorder . $feedback, array('id' => $holderid, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_itemholder hide'));
 
-        //we will need our start button or we wont get fastr
-        $ret = $button . $ret;
+        //we will need our start button and sorrybox as well as the test proper
+        $ret = $button . $sorrybox . $ret;
 
             //put data on page and call js
         $testdata = $fluencytest->fetch_test_data_for_js();

@@ -187,5 +187,5 @@ $string['attemptdetails_header'] = 'Results by item';
 $string['notattempted_header'] = 'Not attempted items';
 $string['count'] = 'Count';
 
-
+$string['sorryunsupported']="Oh no! <br> Your browser does not support this activity.";
 
