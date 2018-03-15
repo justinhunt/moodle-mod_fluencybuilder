@@ -28,7 +28,18 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
         init: function(props){
             var dd = this.clone();
 
-            dd.testdata = props.testdata;
+            //pick up opts from html
+            var theid='#amdopts_' + props.widgetid;
+            var configcontrol = $(theid).get(0);
+            if(configcontrol){
+                dd.testdata = JSON.parse(configcontrol.value);
+                $(theid).remove();
+            }else{
+                //if there is no config we might as well give up
+                log.debug('FB Test Controller: No config found on page. Giving up.');
+                return;
+            }
+
             dd.cmid = props.cmid;
             dd.holderid = props.widgetid + '_holder';
             dd.recorderid = props.widgetid + '_recorder';

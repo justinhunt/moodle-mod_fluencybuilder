@@ -94,11 +94,17 @@ class renderer extends \plugin_renderer_base {
 
             //put data on page and call js
         $testdata = $fluencytest->fetch_test_data_for_js();
-        $opts=array('testdata' => $testdata,'cmid'=>$cm->id,'widgetid'=>$widgetid);
+
+        //convert opts to json
+
+        //we put the opts in html on the page because moodle/AMD doesn't like lots of opts in js
+        $jsonstring = json_encode($testdata);
+        $test_opts = \html_writer::tag('input', '', array('id' => 'amdopts_' . $widgetid, 'type' => 'hidden', 'value' => $jsonstring));
+        $ret = $ret . $test_opts;
+
+        $opts=array('cmid'=>$cm->id,'widgetid'=>$widgetid);
         $this->page->requires->js_call_amd("mod_fluencybuilder/testcontroller", 'init', array($opts));
 
-    //    $opts=array('itemid' => $item->id, 'currentitem'=>$currentitem,'itemcount'=>$itemcount,'cmid'=>$cm->id);
-     //   $this->page->requires->js_call_amd("mod_fluencybuilder/postrecorddialog", 'init', array($opts));
 
         //strings for JS
         $this->page->requires->strings_for_js(array(
@@ -122,54 +128,6 @@ class renderer extends \plugin_renderer_base {
 
     }
 
-
-
-    /*
-     * Show the list of recorders and dialogs for display on the activity page
-     * Most will be hidden until it is their turn to e displayed
-     *
-     */
-    public function show_items($cm,$fluencybuilder){
-
-        $ret='';
-
-
-        $fluencytest = new \mod_fluencybuilder\fluencytest($cm);
-        $items = $fluencytest->fetch_items();
-        $itemcount=count($items);
-        $currentitem=0;
-        foreach($items as $item) {
-            $currentitem++;
-            //$showorhide= $currentitem==1 '' : 'hide';
-            $showorhide= 'hide';
-
-            //recorder
-            $resourceurl = $fluencytest->fetch_media_url(\mod_fluencybuilder\fbquestion\constants::AUDIOPROMPT_FILEAREA, $item);
-            $modelurl = $fluencytest->fetch_media_url(\mod_fluencybuilder\fbquestion\constants::AUDIOMODEL_FILEAREA, $item);
-            $recorder = $fluencytest->prepare_recorder_tool($resourceurl, $modelurl, $item);
-            $itemprogress =  \html_writer::tag('h3',$currentitem . '/' . $itemcount, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemprogress'));
-            $itemheader =  \html_writer::tag('div',$fluencybuilder->questionheader, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
-            $itemtext =  \html_writer::tag('div',$item->{\mod_fluencybuilder\fbquestion\constants::TEXTQUESTION}, array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext'));
-
-            //post record dialog
-            $ret.=  \html_writer::tag('div',$itemprogress . $itemheader . $itemtext . $recorder, array('id' => 'mod_fluencybuilder_dplaceholder_' . $currentitem, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_itemholder ' . $showorhide));
-            $opts=array('itemid' => $item->id, 'currentitem'=>$currentitem,'itemcount'=>$itemcount,'cmid'=>$cm->id);
-            $this->page->requires->js_call_amd("mod_fluencybuilder/postrecorddialog", 'init', array($opts));
-        }
-
-        //strings for JS
-        $this->page->requires->strings_for_js(array(
-            'cancelui_cancelactivity',
-            'cancelui_reallycancel',
-            'cancelui_iwantquit',
-            'cancelui_inoquit',
-            'recui_howwasit',
-            'recui_next'
-        ),
-            'mod_fluencybuilder');
-
-        return $ret;
-    }
 
     public function show_attempt_summary($attempt){
 
