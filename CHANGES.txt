@@ -1,3 +1,7 @@
+version 2018031201
+Large refactor of code to improve stability and consistency
+Check for browser compatibility on activity start page
+
 version 2016032602
 added a new sessions scheme. Please do not duplicate items on the the same course though.
 Added a report for all items by user in an activity
