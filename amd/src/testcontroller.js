@@ -16,6 +16,7 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
         recorderid: null,
         playerid: null,
         startbuttonid: null,
+        sorryboxid: null,
         controls: null,
         fbrecorder: null,
 
@@ -45,7 +46,15 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
             dd.recorderid = props.widgetid + '_recorder';
             dd.playerid = props.widgetid + '_player';
             dd.startbuttonid = props.widgetid + '_startbutton';
+            dd.sorryboxid = props.widgetid + '_sorrybox';
             dd.itemcount = dd.testdata.length;
+
+            //if the browser doesn't support html5 recording.
+            //then warn and do not go any further
+            if(!dd.is_browser_ok()){
+                $('#' + dd.sorryboxid).show();
+                return;
+            }
 
             dd.setup_recorder();
             dd.process_html();
@@ -79,10 +88,7 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
             ip.config.resource2 = item.modelurl;
 
             var controlbar = ip.controlbar;
-            /*
-            controlbar.resourceplayer[0].src = item.resourceurl;
-            controlbar.modelplayer[0].src =item.modelurl;
-            */
+
 
             //commence playback
             controlbar.resourcebutton.click();
@@ -120,6 +126,12 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
         	 }catch(e){
         	 	//d nothing
         	 }
+        },
+
+        is_browser_ok: function(){
+
+            return (navigator && navigator.mediaDevices
+                && navigator.mediaDevices.getUserMedia);
         },
 
         setup_recorder: function(){
