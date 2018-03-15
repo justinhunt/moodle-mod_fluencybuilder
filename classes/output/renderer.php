@@ -77,7 +77,7 @@ class renderer extends \plugin_renderer_base {
         $playerid = $widgetid . '_player';
         $feedback = '<div class="hide">';
         $feedback .= '<audio id="' . $playerid . '"></audio>';
-        $feedback .= '<div class="mod_fluencybuilder_dialogcontentbox" title="'+ get_string('recui_howwasit',MOD_FLUENCYBUILDER_LANG) +'">';
+        $feedback .= '<div class="mod_fluencybuilder_dialogcontentbox" title="' . get_string('recui_howwasit',MOD_FLUENCYBUILDER_LANG) . '">';
         $feedback .=  '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_play"><i class="fa fa-play" aria-hidden="true"></i></button>';
         $feedback .= '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ok"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>';
         $feedback .= ' <button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ng"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></button>';

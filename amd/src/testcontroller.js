@@ -118,7 +118,7 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
         	 checkplayer.play();
         	 checkplayer.pause();
         	 }catch(e){
-        	 	//do nothing
+        	 	//d nothing
         	 }
         },
 
@@ -152,7 +152,6 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
             //ip is the internal props of the fb recorder
             var ip = dd.fbrecorder.fetch_instanceprops();
 
-
 			//these are the correct and incorrect buttons
             dd.controls.me_ok.click(function () {
                 dd.send_evaluation('ok');
@@ -165,8 +164,9 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
 			//we change display to enabled after we have attached our click event
             dd.controls.startbutton.click(function(){
                 $(this).hide();
-                //its important to warmup the audio player before using it
+                //we need to warm up the player
                 dd.warmup_player();
+                //debugger;
                 dd.controls.holder.show();
                 dd.start_item();
                 
