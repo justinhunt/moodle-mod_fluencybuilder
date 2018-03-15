@@ -111,6 +111,16 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
             this.controls = controls;
 
         },
+        
+        warmup_player: function(){
+        	var checkplayer = this.controls.player[0];
+        	try{
+        	 checkplayer.play();
+        	 checkplayer.pause();
+        	 }catch(e){
+        	 	//do nothing
+        	 }
+        },
 
         setup_recorder: function(){
             var params=[];
@@ -142,25 +152,28 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
             //ip is the internal props of the fb recorder
             var ip = dd.fbrecorder.fetch_instanceprops();
 
-            var recorder_play_button = $('#' + dd.holderid + '  .poodll_play-recording_fluencybuilder');
 
+			//these are the correct and incorrect buttons
             dd.controls.me_ok.click(function () {
                 dd.send_evaluation('ok');
             });
-
             dd.controls.me_ng.click(function () {
                 dd.send_evaluation('ng');
             });
 
+			//this is the test start button
+			//we change display to enabled after we have attached our click event
             dd.controls.startbutton.click(function(){
                 $(this).hide();
-                //debugger;
+                //its important to warmup the audio player before using it
+                dd.warmup_player();
                 dd.controls.holder.show();
                 dd.start_item();
+                
             }),
             dd.controls.startbutton.removeClass('mod_fluencybuilder_startbutton_disabled'),
 
-            //set the submission player src to the origin
+            //this is the playback recording check player
             dd.controls.me_play.click(function () {
                 var checkplayer = dd.controls.player[0];
                 pmr.do_play_audio(ip,checkplayer);
