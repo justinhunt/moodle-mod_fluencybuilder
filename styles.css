@@ -73,15 +73,9 @@ div.mod_fluencybuilder_actionbuttons {
 	width: 10%;
 }
 
-
-
-
-
-
 /*
 	Summary Section
 */
-
 
 
 .mod_fluencybuilder_reviewrow_itemorder strong{
@@ -166,19 +160,11 @@ div.mod_fluencybuilder_actionbuttons {
 	}
 }
 
+a.mod_fluencybuilder_startbutton_disabled{
+	color: #d2d2d2;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.mod_fluencybuilder_listbuttons .singlebutton {
+	margin: 7px;
+}
 

@@ -21,7 +21,6 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd'], function($, 
             this.instanceprops=props;
             this.buttonid=props.startbuttonid;
             this.register_events();
-
         },
 
         register_events: function() {

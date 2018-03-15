@@ -54,6 +54,76 @@ class renderer extends \plugin_renderer_base {
         return $output;
     }
 
+    public function fetch_test_html($cm){
+        $fluencytest = new \mod_fluencybuilder\fluencytest($cm);
+
+        $widgetid = MOD_FLUENCYBUILDER_CLASS . '_thefb_9999';
+
+        //the start button
+        $buttonid = $widgetid . '_startbutton';
+        $caption =  get_string('gotoactivity',MOD_FLUENCYBUILDER_LANG);
+        $button =  \html_writer::link('#', $caption,array('id'=>$buttonid,'class'=>'btn btn-primary ' . MOD_FLUENCYBUILDER_CLASS  . '_startbutton ' . MOD_FLUENCYBUILDER_CLASS  . '_startbutton_disabled'));
+
+        //the recorder div
+        $recorderid = $widgetid . '_recorder';
+        $recorder =  \html_writer::tag('div','', array('id' => $recorderid));
+
+        //surrounding texty bits
+        $itemprogress =  \html_writer::tag('h3','', array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemprogress'));
+        $itemheader =  \html_writer::tag('div','', array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext ' . MOD_FLUENCYBUILDER_CLASS  . '_itemheader'));
+        $itemtext =  \html_writer::tag('div','', array('class' => MOD_FLUENCYBUILDER_CLASS  . '_itemtext ' . MOD_FLUENCYBUILDER_CLASS  . '_itemothertext'));
+
+        //the feedback widget
+        $playerid = $widgetid . '_player';
+        $feedback = '<div class="hide">';
+        $feedback .= '<audio id="' . $playerid . '"></audio>';
+        $feedback .= '<div class="mod_fluencybuilder_dialogcontentbox" title="Title">';
+        $feedback .=  '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_play"><i class="fa fa-play" aria-hidden="true"></i></button>';
+        $feedback .= '<button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ok"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>';
+        $feedback .= ' <button type="button" class="mod_fluencybuilder_dbutton mod_fluencybuilder_me_ng"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></button>';
+        $feedback .= '</div>';//end of dialog div
+        $feedback .= '</div>';//end of hide div
+
+
+        //Assembles the html
+        $holderid= $widgetid . '_holder';
+        $ret =  \html_writer::tag('div',$itemprogress . $itemheader . $itemtext . $recorder . $feedback, array('id' => $holderid, 'class' => MOD_FLUENCYBUILDER_CLASS  . '_itemholder hide'));
+
+        //we will need our start button or we wont get fastr
+        $ret = $button . $ret;
+
+            //put data on page and call js
+        $testdata = $fluencytest->fetch_test_data_for_js();
+        $opts=array('testdata' => $testdata,'cmid'=>$cm->id,'widgetid'=>$widgetid);
+        $this->page->requires->js_call_amd("mod_fluencybuilder/testcontroller", 'init', array($opts));
+
+    //    $opts=array('itemid' => $item->id, 'currentitem'=>$currentitem,'itemcount'=>$itemcount,'cmid'=>$cm->id);
+     //   $this->page->requires->js_call_amd("mod_fluencybuilder/postrecorddialog", 'init', array($opts));
+
+        //strings for JS
+        $this->page->requires->strings_for_js(array(
+        'cancelui_cancelactivity',
+        'cancelui_reallycancel',
+        'cancelui_iwantquit',
+        'cancelui_inoquit',
+        'recui_howwasit',
+        'recui_next'
+        ),
+        'mod_fluencybuilder');
+
+        $this->page->requires->strings_for_js(array(
+            'recui_play',
+            'recui_stop',
+            'recui_save'
+        ),
+            'filter_poodll');
+
+        return $ret;
+
+    }
+
+
+
     /*
      * Show the list of recorders and dialogs for display on the activity page
      * Most will be hidden until it is their turn to e displayed

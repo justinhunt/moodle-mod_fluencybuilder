@@ -101,8 +101,15 @@ if($moduleinstance->maxattempts > 0){
 }
 
 $content = '';
-$content .= $renderer->show_items($cm,$moduleinstance);
-$content .= $renderer->fetch_start_button();
+//alternative test implementation
+$content .= $renderer->fetch_test_html($cm);
+
+//original implementation
+//$content .= $renderer->show_items($cm,$moduleinstance);
+
+
+//$content .= $renderer->fetch_start_button();
+
 $content .= $renderer->fetch_cancel_button($cm);
 echo $renderer->containerwrap($content,true);
 

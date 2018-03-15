@@ -85,10 +85,7 @@ class fluencytest
         }
     }
 
-    public function prepare_review_widget($resourceurl, $modelurl, $item){
 
-
-    }
 
     public function prepare_recorder_tool($resourceurl, $modelurl, $item){
         global $USER;
@@ -131,5 +128,66 @@ class fluencytest
         return $str . $ret;
 
     }//end of function
+
+
+    public function prepare_blank_recorder_tool(){
+        global $USER;
+
+        $oldfilename="";
+        $itemid = 99;
+        $usercontextid=\context_user::instance($USER->id)->id;
+
+        $hints=Array();
+        //$hints['resource']=$resourceurl;
+        //$hints['resource2']=$modelurl;
+        $hints['modulecontextid']=$this->context->id;
+        $hints['mediaskin']='fluencybuilder';
+
+        $text='';
+        $options = Array();
+        $draftitemid = file_get_unused_draft_itemid();
+
+
+        $updatecontrol = 'fluencyfile';
+        $idcontrol = $updatecontrol  . '_itemid';
+
+        $str = '<input type="hidden" id="'. $updatecontrol .'" name="'. $updatecontrol .'" value="' . $oldfilename . '" />';
+        $str .= '<input type="hidden"  name="'. $idcontrol .'" value="'.$draftitemid.'" />';
+
+        // $type = DBP_AUDIOMP3;
+
+        $callbackjs=false;
+        $mediatype='audio';
+        $timelimit=0;//$item->timetarget;
+
+
+        $ret = \filter_poodll\poodlltools::fetchAMDRecorderCode($mediatype, $updatecontrol, $usercontextid, 'user', 'draft', $itemid, $timelimit, $callbackjs,$hints);
+        return $str . $ret;
+
+    }//end of function
+
+    public function fetch_test_data_for_js(){
+
+        $items = $this->fetch_items();
+
+        //prepare data array for test
+        $testitems=array();
+        $currentitem=0;
+        $itemcount=count($items);
+        foreach($items as $item) {
+            $currentitem++;
+            $testitem= new \stdClass();
+            $testitem->resourceurl = $this->fetch_media_url(\mod_fluencybuilder\fbquestion\constants::AUDIOPROMPT_FILEAREA, $item);
+            $testitem->modelurl = $this->fetch_media_url(\mod_fluencybuilder\fbquestion\constants::AUDIOMODEL_FILEAREA, $item);
+            $testitem->itemprogress =  $currentitem . '/' . $itemcount;
+            $testitem->itemheader =  $this->mod->questionheader;
+            $testitem->itemtext =  $item->{\mod_fluencybuilder\fbquestion\constants::TEXTQUESTION};
+            $testitem->timetarget = $item->timetarget;
+            $testitem->itemid = $item->id;
+            $testitems[]=$testitem;
+        }
+        return $testitems;
+    }
+
 
 }//end of class
