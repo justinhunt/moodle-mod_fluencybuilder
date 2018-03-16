@@ -84,7 +84,7 @@ class mod_fluencybuilder_mod_form extends moodleform_mod
         $mform->addElement('textarea', 'questionheader', get_string('questionheader', MOD_FLUENCYBUILDER_LANG), array('wrap' => 'virtual', 'rows' => '5', 'cols' => '50'));
         $mform->setType('questionheader', PARAM_TEXT);
         $mform->setDefault('questionheader', get_config('mod_fluencybuilder', 'questionheader'));
-        $mform->addRule('questionheader', null, 'required', null, 'client');
+      //  $mform->addRule('questionheader', null, 'required', null, 'client');
 
 
         //time target
