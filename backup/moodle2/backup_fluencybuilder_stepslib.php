@@ -27,7 +27,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/fluencybuilder/lib.php');
- require_once($CFG->dirroot . '/mod/fluencybuilder/fbquestion/fbquestionlib.php');
 
 /**
  * Defines the complete webquest structure for backup, with file and id annotations
@@ -109,7 +108,7 @@ class backup_fluencybuilder_activity_structure_step extends backup_activity_stru
         $oneactivity->annotate_files(MOD_FLUENCYBUILDER_FRANKY, 'intro', null);
 		
 		//other file areas use fluencybuilderid
-		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::EXTQUESTION_FILEAREA, 'id');
+		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::TEXTQUESTION_FILEAREA, 'id');
 		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::PICTUREPROMPT_FILEAREA, 'id');
 		$fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOPROMPT_FILEAREA, 'id');
         $fbquestion->annotate_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOMODEL_FILEAREA, 'id');

@@ -22,7 +22,7 @@
  */
  
  require_once($CFG->dirroot . '/mod/fluencybuilder/lib.php');
- require_once($CFG->dirroot . '/mod/fluencybuilder/fbquestion/fbquestionlib.php');
+
 
 /**
  * Define all the restore steps that will be used by the restore_fluencybuilder_activity_task
@@ -146,7 +146,7 @@ class restore_fluencybuilder_activity_structure_step extends restore_activity_st
         $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, 'intro', null);
 
 		//do question areas
-		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::TEXTQUESTION_FILEAREA, \mod_fluencybuilder\fbquestion\constants::ABLE);
+		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::TEXTQUESTION_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
 		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOPROMPT_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
         $this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::AUDIOMODEL_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
 		$this->add_related_files(MOD_FLUENCYBUILDER_FRANKY, \mod_fluencybuilder\fbquestion\constants::PICTUREPROMPT_FILEAREA, \mod_fluencybuilder\fbquestion\constants::TABLE);
