@@ -83,6 +83,8 @@ define(['jquery','jqueryui', 'core/log','filter_poodll/utils_amd','filter_poodll
             //set recorder with item data
             var ip = dd.fbrecorder.fetch_instanceprops();
             ip.config.timelimit=item.timetarget;
+            ip.timer.initseconds=parseInt(item.timetarget);
+            ip.timer.seconds=parseInt(item.timetarget);
 
             ip.config.resource = item.resourceurl;
             ip.config.resource2 = item.modelurl;

@@ -1,3 +1,7 @@
+version 2018032801
+Fixed bug where timelimit was never anything other than 5s
+
+
 version 2018031201
 Large refactor of code to improve stability and consistency
 Check for browser compatibility on activity start page
