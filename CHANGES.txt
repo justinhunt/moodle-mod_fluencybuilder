@@ -1,6 +1,8 @@
+Version 1.1.0(Build 2018041000)
+-Implemented new Moodle Privacy API
+
 version 2018032801
 Fixed bug where timelimit was never anything other than 5s
-
 
 version 2018031201
 Large refactor of code to improve stability and consistency

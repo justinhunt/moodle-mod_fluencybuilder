@@ -19,8 +19,6 @@
 /**
  * Defines the version of fluencybuilder
  *
- * This code fragment is called by moodle_needs_upgrading() and
- * /admin/index.php
  *
  * @package    mod_fluencybuilder
  * @copyright  fluencybuilder
@@ -29,6 +27,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018032801;      // If version == 0 then module will not be installed
+$plugin->version   = 2018041000;      // If version == 0 then module will not be installed
 $plugin->requires  = 2010031900;      // Requires this Moodle version
 $plugin->component = 'mod_fluencybuilder'; // To check on upgrade, that module sits in correct place
+$plugin->maturity  = MATURITY_STABLE;
+$plugin->release = 'Version 1.1.0(Build 2018041000)';
