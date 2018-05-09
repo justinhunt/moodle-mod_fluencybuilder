@@ -47,8 +47,8 @@ class event_observer{
 		//MOD_FLUENCYBUILDER_TABLE should be deleted elsewhere
 		//this is just to demonstrate how to handle an event. 
 		//It is probably not even necessary to clear data from here when a course is deleted.
-		$ret = $DB->delete_records(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE,array('courseid'=>$event->objectid));
-		$ret = $DB->delete_records(MOD_FLUENCYBUILDER_ATTEMPTTABLE,array('courseid'=>$event->objectid));
+		$ret = $DB->delete_records(MOD_FLUENCYBUILDER_ATTEMPTITEMTABLE,array('course'=>$event->objectid));
+		$ret = $DB->delete_records(MOD_FLUENCYBUILDER_ATTEMPTTABLE,array('course'=>$event->objectid));
 		return $ret;
 	}
 }
