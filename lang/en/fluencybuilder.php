@@ -41,6 +41,10 @@ $string['pluginname'] = 'Fluency Builder Activity';
 $string['questionheader'] = 'Question header';
 $string['questionheader_desc'] = 'Add a default question header here';
 $string['privacy:metadata'] = 'The Poodll Fluency Builder plugin does store personal data.';
+$string['fluencybuilder:submit'] = 'Can submit a Fluency Builder activity';
+$string['fluencybuilder:preview'] = 'Can preview a Fluency Builder activity';
+$string['fluencybuilder:manageattempts'] = 'Can manage Fluency Builder attempts';
+$string['fluencybuilder:manage'] = 'Can manage Fluency Builder activities';
 
 $string['fluencybuildersettings'] = 'fluencybuilder settings';
 $string['fluencybuilder:addinstance'] = 'Add a new fluencybuilder';
